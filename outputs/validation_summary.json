@@ -1,0 +1,11 @@
+{
+  "status": "ready_to_share",
+  "checks": {
+    "headline_single_row": true,
+    "mrr_positive": true,
+    "rates_bounded": true,
+    "cohort_month_zero_is_full": true,
+    "segment_mrr_reconciles": true,
+    "trend_has_twelve_points": true
+  }
+}

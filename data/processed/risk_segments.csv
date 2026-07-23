@@ -1,0 +1,12 @@
+segment,acquisition_channel,eligible_accounts,activation_rate,logo_churn_rate,nrr,current_mrr
+SMB,Paid Search,214,0.5701,0.0545,0.9366,7217.99
+Mid-market,Paid Search,37,0.6216,0.0,1.0136,9034.57
+SMB,Organic,219,0.7215,0.0638,0.9466,12909.44
+Mid-market,Organic,57,0.7544,0.0625,0.9674,17932.02
+SMB,Partner,54,0.7778,0.0,1.0032,5025.28
+SMB,Outbound,97,0.8041,0.0385,0.9432,6587.64
+Mid-market,Outbound,61,0.8361,0.1081,0.9299,19171.24
+Enterprise,Outbound,56,0.9107,0.0222,0.9885,109621.45
+Enterprise,Organic,14,0.9286,0.0,1.0265,32431.23
+Mid-market,Partner,57,0.9298,0.0444,0.9819,27239.61
+Enterprise,Partner,34,0.9706,0.0,1.0102,67968.71

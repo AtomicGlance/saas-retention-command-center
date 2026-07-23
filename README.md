@@ -92,4 +92,3 @@ The synthetic data intentionally contains weaker activation and retention for
 some acquisition/segment combinations. These differences are useful for
 demonstrating prioritization and experiment design; they must not be presented
 as causal estimates or real-world benchmarks.
-

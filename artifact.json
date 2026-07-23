@@ -1,0 +1,1092 @@
+{
+  "surface": "dashboard",
+  "manifest": {
+    "version": 1,
+    "surface": "dashboard",
+    "title": "Retention Command Center",
+    "description": "A SQL-backed operating review of synthetic SaaS growth and retention.",
+    "generatedAt": "2025-12-31T23:59:59Z",
+    "cards": [
+      {
+        "id": "mrr_card",
+        "description": "Active recurring revenue in the latest complete month.",
+        "dataset": "headline_kpis",
+        "sourceId": "headline_kpis_sql",
+        "metrics": [
+          {
+            "label": "Monthly recurring revenue",
+            "field": "mrr",
+            "format": "currency"
+          },
+          {
+            "label": "MoM",
+            "field": "mrr_mom_growth",
+            "format": "percent",
+            "signed": true
+          }
+        ]
+      },
+      {
+        "id": "nrr_card",
+        "description": "Revenue retained from the prior-month customer base, including expansion and churn.",
+        "dataset": "headline_kpis",
+        "sourceId": "headline_kpis_sql",
+        "metrics": [
+          {
+            "label": "Net revenue retention",
+            "field": "nrr",
+            "format": "percent"
+          }
+        ]
+      },
+      {
+        "id": "churn_card",
+        "description": "Share of prior-month active accounts absent in the latest month.",
+        "dataset": "headline_kpis",
+        "sourceId": "headline_kpis_sql",
+        "metrics": [
+          {
+            "label": "Logo churn",
+            "field": "logo_churn_rate",
+            "format": "percent"
+          }
+        ]
+      },
+      {
+        "id": "activation_card",
+        "description": "Eligible signups completing both activation milestones within 14 days.",
+        "dataset": "headline_kpis",
+        "sourceId": "headline_kpis_sql",
+        "metrics": [
+          {
+            "label": "14-day activation",
+            "field": "activation_rate",
+            "format": "percent"
+          }
+        ]
+      },
+      {
+        "id": "conversion_card",
+        "description": "Eligible signups becoming paid customers within 30 days.",
+        "dataset": "headline_kpis",
+        "sourceId": "headline_kpis_sql",
+        "metrics": [
+          {
+            "label": "Trial-to-paid",
+            "field": "trial_to_paid_rate",
+            "format": "percent"
+          }
+        ]
+      }
+    ],
+    "charts": [
+      {
+        "id": "mrr_trend_chart",
+        "title": "Monthly recurring revenue",
+        "subtitle": "Latest twelve complete months; synthetic USD.",
+        "type": "line",
+        "dataset": "monthly_trend",
+        "sourceId": "monthly_trend_sql",
+        "valueFormat": "currency",
+        "encodings": {
+          "x": {
+            "field": "month",
+            "type": "temporal",
+            "label": "Month"
+          },
+          "y": {
+            "field": "mrr",
+            "type": "quantitative",
+            "label": "MRR"
+          },
+          "tooltip": [
+            {
+              "field": "active_accounts",
+              "type": "quantitative",
+              "label": "Active accounts"
+            },
+            {
+              "field": "new_accounts",
+              "type": "quantitative",
+              "label": "New signups"
+            },
+            {
+              "field": "churned_accounts",
+              "type": "quantitative",
+              "label": "Churned accounts"
+            }
+          ]
+        }
+      },
+      {
+        "id": "segment_nrr_chart",
+        "title": "Net revenue retention by segment",
+        "subtitle": "Latest month versus the prior-month customer base.",
+        "type": "bar",
+        "dataset": "segment_health",
+        "sourceId": "segment_health_sql",
+        "valueFormat": "percent",
+        "encodings": {
+          "x": {
+            "field": "segment",
+            "type": "nominal",
+            "label": "Segment"
+          },
+          "y": {
+            "field": "nrr",
+            "type": "quantitative",
+            "label": "NRR"
+          },
+          "tooltip": [
+            {
+              "field": "mrr",
+              "type": "quantitative",
+              "label": "Current MRR",
+              "format": "currency"
+            },
+            {
+              "field": "logo_churn_rate",
+              "type": "quantitative",
+              "label": "Logo churn",
+              "format": "percent"
+            }
+          ]
+        }
+      },
+      {
+        "id": "channel_activation_chart",
+        "title": "Activation by acquisition channel",
+        "subtitle": "Both milestones completed within 14 days; eligible signups only.",
+        "type": "bar",
+        "dataset": "channel_health",
+        "sourceId": "channel_health_sql",
+        "valueFormat": "percent",
+        "encodings": {
+          "x": {
+            "field": "acquisition_channel",
+            "type": "nominal",
+            "label": "Channel"
+          },
+          "y": {
+            "field": "activation_rate",
+            "type": "quantitative",
+            "label": "Activation"
+          },
+          "tooltip": [
+            {
+              "field": "eligible_accounts",
+              "type": "quantitative",
+              "label": "Eligible accounts"
+            },
+            {
+              "field": "trial_to_paid_rate",
+              "type": "quantitative",
+              "label": "Trial-to-paid",
+              "format": "percent"
+            }
+          ]
+        }
+      },
+      {
+        "id": "cohort_heatmap",
+        "title": "Paid-customer cohort retention",
+        "subtitle": "Jan–Jun 2025 cohorts; months since first paid month.",
+        "type": "heatmap",
+        "dataset": "cohort_retention",
+        "sourceId": "cohort_retention_sql",
+        "valueFormat": "percent",
+        "encodings": {
+          "x": {
+            "field": "cohort_month",
+            "type": "nominal",
+            "label": "Paid cohort"
+          },
+          "y": {
+            "field": "retention_rate",
+            "type": "quantitative",
+            "label": "Retention"
+          },
+          "color": {
+            "field": "month_number",
+            "type": "ordinal",
+            "label": "Months since paid"
+          },
+          "tooltip": [
+            {
+              "field": "cohort_size",
+              "type": "quantitative",
+              "label": "Starting cohort"
+            },
+            {
+              "field": "retained_accounts",
+              "type": "quantitative",
+              "label": "Retained accounts"
+            }
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "risk_table",
+        "title": "Segment-channel risk queue",
+        "subtitle": "Groups with at least 12 prior-month active accounts, ordered by activation.",
+        "dataset": "risk_segments",
+        "sourceId": "risk_segments_sql",
+        "defaultSort": {
+          "field": "activation_rate",
+          "direction": "asc"
+        },
+        "columns": [
+          {
+            "field": "segment",
+            "label": "Segment",
+            "type": "text"
+          },
+          {
+            "field": "acquisition_channel",
+            "label": "Channel",
+            "type": "text"
+          },
+          {
+            "field": "eligible_accounts",
+            "label": "Eligible accounts",
+            "format": "number"
+          },
+          {
+            "field": "activation_rate",
+            "label": "Activation",
+            "format": "percent"
+          },
+          {
+            "field": "logo_churn_rate",
+            "label": "Logo churn",
+            "format": "percent",
+            "movement": true
+          },
+          {
+            "field": "nrr",
+            "label": "NRR",
+            "format": "percent"
+          },
+          {
+            "field": "current_mrr",
+            "label": "Current MRR",
+            "format": "currency"
+          }
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "headline_kpis_sql",
+        "label": "Headline Kpis",
+        "path": "sql/analysis.sql"
+      },
+      {
+        "id": "monthly_trend_sql",
+        "label": "Monthly Trend",
+        "path": "sql/analysis.sql"
+      },
+      {
+        "id": "segment_health_sql",
+        "label": "Segment Health",
+        "path": "sql/analysis.sql"
+      },
+      {
+        "id": "channel_health_sql",
+        "label": "Channel Health",
+        "path": "sql/analysis.sql"
+      },
+      {
+        "id": "cohort_retention_sql",
+        "label": "Cohort Retention",
+        "path": "sql/analysis.sql"
+      },
+      {
+        "id": "risk_segments_sql",
+        "label": "Risk Segments",
+        "path": "sql/analysis.sql"
+      }
+    ],
+    "blocks": [
+      {
+        "id": "intro",
+        "type": "markdown",
+        "body": "## Monthly operating review\n\n**Synthetic portfolio dataset · complete through Dec 2025.** Monitor revenue retention, diagnose acquisition quality, and choose the next growth intervention."
+      },
+      {
+        "id": "hero_metrics",
+        "type": "metric-strip",
+        "cardIds": [
+          "mrr_card",
+          "nrr_card",
+          "churn_card",
+          "activation_card",
+          "conversion_card"
+        ]
+      },
+      {
+        "id": "mrr_trend",
+        "type": "chart",
+        "chartId": "mrr_trend_chart"
+      },
+      {
+        "id": "decision_signal",
+        "type": "markdown",
+        "sourceId": "risk_segments_sql",
+        "body": "## Decision signal\n\nSMB accounts acquired through Paid Search show the weakest activation in the reviewed segment-channel groups (57.0%). Treat this as a targeting signal for an onboarding experiment, not causal proof."
+      },
+      {
+        "id": "segment_nrr",
+        "type": "chart",
+        "chartId": "segment_nrr_chart"
+      },
+      {
+        "id": "channel_activation",
+        "type": "chart",
+        "chartId": "channel_activation_chart"
+      },
+      {
+        "id": "cohorts",
+        "type": "chart",
+        "chartId": "cohort_heatmap"
+      },
+      {
+        "id": "risk_queue",
+        "type": "table",
+        "tableId": "risk_table"
+      },
+      {
+        "id": "caveat",
+        "type": "markdown",
+        "body": "## Interpretation boundary\n\nThis dataset is deterministic and synthetic. Segment differences are descriptive and suitable for prioritizing an experiment; they do not establish causal channel or onboarding effects."
+      }
+    ]
+  },
+  "snapshot": {
+    "version": 1,
+    "generatedAt": "2025-12-31T23:59:59Z",
+    "status": "fixture",
+    "datasets": {
+      "headline_kpis": [
+        {
+          "as_of_month": "2025-12-01",
+          "mrr": 315139.18,
+          "active_accounts": 423,
+          "mrr_mom_growth": -0.0118,
+          "nrr": 0.9882,
+          "logo_churn_rate": 0.0451,
+          "arpa": 745.01,
+          "activation_rate": 0.7411,
+          "trial_to_paid_rate": 0.6589,
+          "eligible_accounts": 900,
+          "activated_accounts": 667,
+          "eligible_trials": 900,
+          "converted_trials": 593
+        }
+      ],
+      "monthly_trend": [
+        {
+          "month": "2025-01-01",
+          "mrr": 93723.39,
+          "active_accounts": 166,
+          "new_accounts": 56,
+          "churned_accounts": 7
+        },
+        {
+          "month": "2025-02-01",
+          "mrr": 118213.08,
+          "active_accounts": 203,
+          "new_accounts": 48,
+          "churned_accounts": 2
+        },
+        {
+          "month": "2025-03-01",
+          "mrr": 136905.06,
+          "active_accounts": 221,
+          "new_accounts": 59,
+          "churned_accounts": 12
+        },
+        {
+          "month": "2025-04-01",
+          "mrr": 164353.16,
+          "active_accounts": 257,
+          "new_accounts": 56,
+          "churned_accounts": 13
+        },
+        {
+          "month": "2025-05-01",
+          "mrr": 181322.51,
+          "active_accounts": 275,
+          "new_accounts": 66,
+          "churned_accounts": 14
+        },
+        {
+          "month": "2025-06-01",
+          "mrr": 213125.9,
+          "active_accounts": 313,
+          "new_accounts": 65,
+          "churned_accounts": 10
+        },
+        {
+          "month": "2025-07-01",
+          "mrr": 232564.64,
+          "active_accounts": 344,
+          "new_accounts": 61,
+          "churned_accounts": 7
+        },
+        {
+          "month": "2025-08-01",
+          "mrr": 261949.11,
+          "active_accounts": 386,
+          "new_accounts": 78,
+          "churned_accounts": 14
+        },
+        {
+          "month": "2025-09-01",
+          "mrr": 282826.58,
+          "active_accounts": 405,
+          "new_accounts": 75,
+          "churned_accounts": 15
+        },
+        {
+          "month": "2025-10-01",
+          "mrr": 304537.48,
+          "active_accounts": 439,
+          "new_accounts": 70,
+          "churned_accounts": 17
+        },
+        {
+          "month": "2025-11-01",
+          "mrr": 318917.31,
+          "active_accounts": 443,
+          "new_accounts": 0,
+          "churned_accounts": 19
+        },
+        {
+          "month": "2025-12-01",
+          "mrr": 315139.18,
+          "active_accounts": 423,
+          "new_accounts": 0,
+          "churned_accounts": 20
+        }
+      ],
+      "segment_health": [
+        {
+          "segment": "Enterprise",
+          "active_accounts": 82,
+          "mrr": 210021.39,
+          "nrr": 1.0012,
+          "logo_churn_rate": 0.012,
+          "activation_rate": 0.9327
+        },
+        {
+          "segment": "Mid-market",
+          "active_accounts": 119,
+          "mrr": 73377.44,
+          "nrr": 0.9679,
+          "logo_churn_rate": 0.063,
+          "activation_rate": 0.8019
+        },
+        {
+          "segment": "SMB",
+          "active_accounts": 222,
+          "mrr": 31740.35,
+          "nrr": 0.9521,
+          "logo_churn_rate": 0.0472,
+          "activation_rate": 0.6849
+        }
+      ],
+      "channel_health": [
+        {
+          "acquisition_channel": "Partner",
+          "eligible_accounts": 145,
+          "activation_rate": 0.8828,
+          "trial_to_paid_rate": 0.8414
+        },
+        {
+          "acquisition_channel": "Outbound",
+          "eligible_accounts": 214,
+          "activation_rate": 0.8411,
+          "trial_to_paid_rate": 0.757
+        },
+        {
+          "acquisition_channel": "Organic",
+          "eligible_accounts": 290,
+          "activation_rate": 0.7379,
+          "trial_to_paid_rate": 0.6724
+        },
+        {
+          "acquisition_channel": "Paid Search",
+          "eligible_accounts": 251,
+          "activation_rate": 0.5777,
+          "trial_to_paid_rate": 0.4542
+        }
+      ],
+      "cohort_retention": [
+        {
+          "cohort_month": "2025-01-01",
+          "month_number": 0,
+          "retained_accounts": 32,
+          "cohort_size": 32,
+          "retention_rate": 1.0
+        },
+        {
+          "cohort_month": "2025-01-01",
+          "month_number": 1,
+          "retained_accounts": 31,
+          "cohort_size": 32,
+          "retention_rate": 0.9688
+        },
+        {
+          "cohort_month": "2025-01-01",
+          "month_number": 2,
+          "retained_accounts": 27,
+          "cohort_size": 32,
+          "retention_rate": 0.8438
+        },
+        {
+          "cohort_month": "2025-01-01",
+          "month_number": 3,
+          "retained_accounts": 26,
+          "cohort_size": 32,
+          "retention_rate": 0.8125
+        },
+        {
+          "cohort_month": "2025-01-01",
+          "month_number": 4,
+          "retained_accounts": 24,
+          "cohort_size": 32,
+          "retention_rate": 0.75
+        },
+        {
+          "cohort_month": "2025-01-01",
+          "month_number": 5,
+          "retained_accounts": 22,
+          "cohort_size": 32,
+          "retention_rate": 0.6875
+        },
+        {
+          "cohort_month": "2025-01-01",
+          "month_number": 6,
+          "retained_accounts": 22,
+          "cohort_size": 32,
+          "retention_rate": 0.6875
+        },
+        {
+          "cohort_month": "2025-02-01",
+          "month_number": 0,
+          "retained_accounts": 39,
+          "cohort_size": 39,
+          "retention_rate": 1.0
+        },
+        {
+          "cohort_month": "2025-02-01",
+          "month_number": 1,
+          "retained_accounts": 37,
+          "cohort_size": 39,
+          "retention_rate": 0.9487
+        },
+        {
+          "cohort_month": "2025-02-01",
+          "month_number": 2,
+          "retained_accounts": 33,
+          "cohort_size": 39,
+          "retention_rate": 0.8462
+        },
+        {
+          "cohort_month": "2025-02-01",
+          "month_number": 3,
+          "retained_accounts": 32,
+          "cohort_size": 39,
+          "retention_rate": 0.8205
+        },
+        {
+          "cohort_month": "2025-02-01",
+          "month_number": 4,
+          "retained_accounts": 32,
+          "cohort_size": 39,
+          "retention_rate": 0.8205
+        },
+        {
+          "cohort_month": "2025-02-01",
+          "month_number": 5,
+          "retained_accounts": 32,
+          "cohort_size": 39,
+          "retention_rate": 0.8205
+        },
+        {
+          "cohort_month": "2025-02-01",
+          "month_number": 6,
+          "retained_accounts": 27,
+          "cohort_size": 39,
+          "retention_rate": 0.6923
+        },
+        {
+          "cohort_month": "2025-03-01",
+          "month_number": 0,
+          "retained_accounts": 30,
+          "cohort_size": 30,
+          "retention_rate": 1.0
+        },
+        {
+          "cohort_month": "2025-03-01",
+          "month_number": 1,
+          "retained_accounts": 29,
+          "cohort_size": 30,
+          "retention_rate": 0.9667
+        },
+        {
+          "cohort_month": "2025-03-01",
+          "month_number": 2,
+          "retained_accounts": 28,
+          "cohort_size": 30,
+          "retention_rate": 0.9333
+        },
+        {
+          "cohort_month": "2025-03-01",
+          "month_number": 3,
+          "retained_accounts": 26,
+          "cohort_size": 30,
+          "retention_rate": 0.8667
+        },
+        {
+          "cohort_month": "2025-03-01",
+          "month_number": 4,
+          "retained_accounts": 26,
+          "cohort_size": 30,
+          "retention_rate": 0.8667
+        },
+        {
+          "cohort_month": "2025-03-01",
+          "month_number": 5,
+          "retained_accounts": 26,
+          "cohort_size": 30,
+          "retention_rate": 0.8667
+        },
+        {
+          "cohort_month": "2025-03-01",
+          "month_number": 6,
+          "retained_accounts": 24,
+          "cohort_size": 30,
+          "retention_rate": 0.8
+        },
+        {
+          "cohort_month": "2025-04-01",
+          "month_number": 0,
+          "retained_accounts": 49,
+          "cohort_size": 49,
+          "retention_rate": 1.0
+        },
+        {
+          "cohort_month": "2025-04-01",
+          "month_number": 1,
+          "retained_accounts": 45,
+          "cohort_size": 49,
+          "retention_rate": 0.9184
+        },
+        {
+          "cohort_month": "2025-04-01",
+          "month_number": 2,
+          "retained_accounts": 44,
+          "cohort_size": 49,
+          "retention_rate": 0.898
+        },
+        {
+          "cohort_month": "2025-04-01",
+          "month_number": 3,
+          "retained_accounts": 41,
+          "cohort_size": 49,
+          "retention_rate": 0.8367
+        },
+        {
+          "cohort_month": "2025-04-01",
+          "month_number": 4,
+          "retained_accounts": 38,
+          "cohort_size": 49,
+          "retention_rate": 0.7755
+        },
+        {
+          "cohort_month": "2025-04-01",
+          "month_number": 5,
+          "retained_accounts": 37,
+          "cohort_size": 49,
+          "retention_rate": 0.7551
+        },
+        {
+          "cohort_month": "2025-04-01",
+          "month_number": 6,
+          "retained_accounts": 35,
+          "cohort_size": 49,
+          "retention_rate": 0.7143
+        },
+        {
+          "cohort_month": "2025-05-01",
+          "month_number": 0,
+          "retained_accounts": 32,
+          "cohort_size": 32,
+          "retention_rate": 1.0
+        },
+        {
+          "cohort_month": "2025-05-01",
+          "month_number": 1,
+          "retained_accounts": 31,
+          "cohort_size": 32,
+          "retention_rate": 0.9688
+        },
+        {
+          "cohort_month": "2025-05-01",
+          "month_number": 2,
+          "retained_accounts": 31,
+          "cohort_size": 32,
+          "retention_rate": 0.9688
+        },
+        {
+          "cohort_month": "2025-05-01",
+          "month_number": 3,
+          "retained_accounts": 29,
+          "cohort_size": 32,
+          "retention_rate": 0.9063
+        },
+        {
+          "cohort_month": "2025-05-01",
+          "month_number": 4,
+          "retained_accounts": 29,
+          "cohort_size": 32,
+          "retention_rate": 0.9063
+        },
+        {
+          "cohort_month": "2025-05-01",
+          "month_number": 5,
+          "retained_accounts": 29,
+          "cohort_size": 32,
+          "retention_rate": 0.9063
+        },
+        {
+          "cohort_month": "2025-05-01",
+          "month_number": 6,
+          "retained_accounts": 27,
+          "cohort_size": 32,
+          "retention_rate": 0.8438
+        },
+        {
+          "cohort_month": "2025-06-01",
+          "month_number": 0,
+          "retained_accounts": 48,
+          "cohort_size": 48,
+          "retention_rate": 1.0
+        },
+        {
+          "cohort_month": "2025-06-01",
+          "month_number": 1,
+          "retained_accounts": 48,
+          "cohort_size": 48,
+          "retention_rate": 1.0
+        },
+        {
+          "cohort_month": "2025-06-01",
+          "month_number": 2,
+          "retained_accounts": 47,
+          "cohort_size": 48,
+          "retention_rate": 0.9792
+        },
+        {
+          "cohort_month": "2025-06-01",
+          "month_number": 3,
+          "retained_accounts": 46,
+          "cohort_size": 48,
+          "retention_rate": 0.9583
+        },
+        {
+          "cohort_month": "2025-06-01",
+          "month_number": 4,
+          "retained_accounts": 45,
+          "cohort_size": 48,
+          "retention_rate": 0.9375
+        },
+        {
+          "cohort_month": "2025-06-01",
+          "month_number": 5,
+          "retained_accounts": 42,
+          "cohort_size": 48,
+          "retention_rate": 0.875
+        },
+        {
+          "cohort_month": "2025-06-01",
+          "month_number": 6,
+          "retained_accounts": 41,
+          "cohort_size": 48,
+          "retention_rate": 0.8542
+        }
+      ],
+      "risk_segments": [
+        {
+          "segment": "SMB",
+          "acquisition_channel": "Paid Search",
+          "eligible_accounts": 214,
+          "activation_rate": 0.5701,
+          "logo_churn_rate": 0.0545,
+          "nrr": 0.9366,
+          "current_mrr": 7217.99
+        },
+        {
+          "segment": "Mid-market",
+          "acquisition_channel": "Paid Search",
+          "eligible_accounts": 37,
+          "activation_rate": 0.6216,
+          "logo_churn_rate": 0.0,
+          "nrr": 1.0136,
+          "current_mrr": 9034.57
+        },
+        {
+          "segment": "SMB",
+          "acquisition_channel": "Organic",
+          "eligible_accounts": 219,
+          "activation_rate": 0.7215,
+          "logo_churn_rate": 0.0638,
+          "nrr": 0.9466,
+          "current_mrr": 12909.44
+        },
+        {
+          "segment": "Mid-market",
+          "acquisition_channel": "Organic",
+          "eligible_accounts": 57,
+          "activation_rate": 0.7544,
+          "logo_churn_rate": 0.0625,
+          "nrr": 0.9674,
+          "current_mrr": 17932.02
+        },
+        {
+          "segment": "SMB",
+          "acquisition_channel": "Partner",
+          "eligible_accounts": 54,
+          "activation_rate": 0.7778,
+          "logo_churn_rate": 0.0,
+          "nrr": 1.0032,
+          "current_mrr": 5025.28
+        },
+        {
+          "segment": "SMB",
+          "acquisition_channel": "Outbound",
+          "eligible_accounts": 97,
+          "activation_rate": 0.8041,
+          "logo_churn_rate": 0.0385,
+          "nrr": 0.9432,
+          "current_mrr": 6587.64
+        },
+        {
+          "segment": "Mid-market",
+          "acquisition_channel": "Outbound",
+          "eligible_accounts": 61,
+          "activation_rate": 0.8361,
+          "logo_churn_rate": 0.1081,
+          "nrr": 0.9299,
+          "current_mrr": 19171.24
+        },
+        {
+          "segment": "Enterprise",
+          "acquisition_channel": "Outbound",
+          "eligible_accounts": 56,
+          "activation_rate": 0.9107,
+          "logo_churn_rate": 0.0222,
+          "nrr": 0.9885,
+          "current_mrr": 109621.45
+        },
+        {
+          "segment": "Enterprise",
+          "acquisition_channel": "Organic",
+          "eligible_accounts": 14,
+          "activation_rate": 0.9286,
+          "logo_churn_rate": 0.0,
+          "nrr": 1.0265,
+          "current_mrr": 32431.23
+        },
+        {
+          "segment": "Mid-market",
+          "acquisition_channel": "Partner",
+          "eligible_accounts": 57,
+          "activation_rate": 0.9298,
+          "logo_churn_rate": 0.0444,
+          "nrr": 0.9819,
+          "current_mrr": 27239.61
+        },
+        {
+          "segment": "Enterprise",
+          "acquisition_channel": "Partner",
+          "eligible_accounts": 34,
+          "activation_rate": 0.9706,
+          "logo_churn_rate": 0.0,
+          "nrr": 1.0102,
+          "current_mrr": 67968.71
+        }
+      ]
+    },
+    "accessIssues": []
+  },
+  "sources": [
+    {
+      "id": "headline_kpis_sql",
+      "query": {
+        "engine": "sqlite",
+        "language": "sql",
+        "sql": "WITH bounds AS (\n    SELECT MAX(month) AS latest_month,\n           DATE(MAX(month), '-1 month') AS previous_month\n    FROM subscription_monthly\n),\ncurrent_base AS (\n    SELECT s.account_id, s.mrr\n    FROM subscription_monthly s, bounds b\n    WHERE s.month = b.latest_month\n),\nprevious_base AS (\n    SELECT s.account_id, s.mrr\n    FROM subscription_monthly s, bounds b\n    WHERE s.month = b.previous_month\n),\nretained AS (\n    SELECT p.account_id,\n           p.mrr AS previous_mrr,\n           COALESCE(c.mrr, 0.0) AS current_mrr\n    FROM previous_base p\n    LEFT JOIN current_base c USING (account_id)\n),\nactivation AS (\n    SELECT\n        COUNT(*) AS eligible_accounts,\n        SUM(CASE WHEN configured_date IS NOT NULL\n                      AND integrated_date IS NOT NULL\n                      AND configured_date <= DATE(signup_date, '+14 day')\n                      AND integrated_date <= DATE(signup_date, '+14 day')\n                 THEN 1 ELSE 0 END) AS activated_accounts\n    FROM (\n        SELECT a.account_id, a.signup_date,\n               MIN(CASE WHEN e.event_type = 'workspace_configured' THEN e.event_date END) AS configured_date,\n               MIN(CASE WHEN e.event_type = 'integration_connected' THEN e.event_date END) AS integrated_date\n        FROM accounts a\n        LEFT JOIN product_events e USING (account_id), bounds b\n        WHERE a.signup_date <= DATE(b.latest_month, '-14 day')\n        GROUP BY a.account_id, a.signup_date\n    )\n),\nconversion AS (\n    SELECT\n        COUNT(*) AS eligible_trials,\n        SUM(CASE WHEN paid_date IS NOT NULL\n                      AND paid_date <> ''\n                      AND paid_date <= DATE(signup_date, '+30 day')\n                 THEN 1 ELSE 0 END) AS converted_trials\n    FROM accounts a, bounds b\n    WHERE a.signup_date <= DATE(b.latest_month, '-30 day')\n)\nSELECT\n    b.latest_month AS as_of_month,\n    ROUND((SELECT SUM(mrr) FROM current_base), 2) AS mrr,\n    (SELECT COUNT(*) FROM current_base) AS active_accounts,\n    ROUND(\n        (SELECT SUM(mrr) FROM current_base) /\n        NULLIF((SELECT SUM(mrr) FROM previous_base), 0) - 1,\n        4\n    ) AS mrr_mom_growth,\n    ROUND(SUM(r.current_mrr) / NULLIF(SUM(r.previous_mrr), 0), 4) AS nrr,\n    ROUND(\n        SUM(CASE WHEN r.current_mrr = 0 THEN 1.0 ELSE 0.0 END) /\n        NULLIF(COUNT(*), 0),\n        4\n    ) AS logo_churn_rate,\n    ROUND(\n        (SELECT SUM(mrr) FROM current_base) /\n        NULLIF((SELECT COUNT(*) FROM current_base), 0),\n        2\n    ) AS arpa,\n    ROUND(a.activated_accounts * 1.0 / NULLIF(a.eligible_accounts, 0), 4) AS activation_rate,\n    ROUND(c.converted_trials * 1.0 / NULLIF(c.eligible_trials, 0), 4) AS trial_to_paid_rate,\n    a.eligible_accounts,\n    a.activated_accounts,\n    c.eligible_trials,\n    c.converted_trials\nFROM bounds b\nCROSS JOIN retained r\nCROSS JOIN activation a\nCROSS JOIN conversion c",
+        "description": "Produces the reviewed headline kpis dataset.",
+        "tables_used": [
+          "accounts",
+          "product_events",
+          "subscription_monthly"
+        ],
+        "executed_at": "2025-12-31T23:59:59Z",
+        "filters": [
+          "Complete monthly data through 2025-12-31",
+          "Synthetic B2B SaaS accounts only"
+        ],
+        "metric_definitions": {
+          "MRR": "Sum of active monthly subscription revenue in the selected month.",
+          "NRR": "Current MRR from the prior-month customer base divided by that base's prior MRR.",
+          "Logo churn": "Prior-month active accounts absent in the current month divided by prior-month active accounts.",
+          "Activation": "Eligible signups completing workspace configuration and integration connection within 14 days.",
+          "Trial-to-paid": "Eligible signups with a paid date no later than 30 days after signup."
+        }
+      }
+    },
+    {
+      "id": "monthly_trend_sql",
+      "query": {
+        "engine": "sqlite",
+        "language": "sql",
+        "sql": "WITH months AS (\n    SELECT DISTINCT month FROM subscription_monthly\n    WHERE month >= '2025-01-01'\n),\nmonthly AS (\n    SELECT month, ROUND(SUM(mrr), 2) AS mrr, COUNT(*) AS active_accounts\n    FROM subscription_monthly\n    WHERE month >= '2025-01-01'\n    GROUP BY month\n),\nsignups AS (\n    SELECT DATE(signup_date, 'start of month') AS month, COUNT(*) AS new_accounts\n    FROM accounts\n    WHERE signup_date >= '2025-01-01'\n    GROUP BY DATE(signup_date, 'start of month')\n),\nchurns AS (\n    SELECT DATE(churn_date, 'start of month') AS month, COUNT(*) AS churned_accounts\n    FROM accounts\n    WHERE churn_date IS NOT NULL AND churn_date <> '' AND churn_date >= '2025-01-01'\n    GROUP BY DATE(churn_date, 'start of month')\n)\nSELECT m.month, m.mrr, m.active_accounts,\n       COALESCE(s.new_accounts, 0) AS new_accounts,\n       COALESCE(c.churned_accounts, 0) AS churned_accounts\nFROM monthly m\nLEFT JOIN signups s USING (month)\nLEFT JOIN churns c USING (month)\nORDER BY m.month",
+        "description": "Produces the reviewed monthly trend dataset.",
+        "tables_used": [
+          "accounts",
+          "product_events",
+          "subscription_monthly"
+        ],
+        "executed_at": "2025-12-31T23:59:59Z",
+        "filters": [
+          "Complete monthly data through 2025-12-31",
+          "Synthetic B2B SaaS accounts only"
+        ],
+        "metric_definitions": {
+          "MRR": "Sum of active monthly subscription revenue in the selected month.",
+          "NRR": "Current MRR from the prior-month customer base divided by that base's prior MRR.",
+          "Logo churn": "Prior-month active accounts absent in the current month divided by prior-month active accounts.",
+          "Activation": "Eligible signups completing workspace configuration and integration connection within 14 days.",
+          "Trial-to-paid": "Eligible signups with a paid date no later than 30 days after signup."
+        }
+      }
+    },
+    {
+      "id": "segment_health_sql",
+      "query": {
+        "engine": "sqlite",
+        "language": "sql",
+        "sql": "WITH bounds AS (\n    SELECT MAX(month) AS latest_month, DATE(MAX(month), '-1 month') AS previous_month\n    FROM subscription_monthly\n),\ncurrent_base AS (\n    SELECT a.segment, s.account_id, s.mrr\n    FROM subscription_monthly s JOIN accounts a USING (account_id), bounds b\n    WHERE s.month = b.latest_month\n),\nprevious_base AS (\n    SELECT a.segment, s.account_id, s.mrr\n    FROM subscription_monthly s JOIN accounts a USING (account_id), bounds b\n    WHERE s.month = b.previous_month\n),\nretention AS (\n    SELECT p.segment, p.account_id, p.mrr AS previous_mrr,\n           COALESCE(c.mrr, 0.0) AS current_mrr\n    FROM previous_base p\n    LEFT JOIN current_base c USING (segment, account_id)\n),\nsegment_retention AS (\n    SELECT segment,\n           SUM(current_mrr) / NULLIF(SUM(previous_mrr), 0) AS nrr,\n           SUM(CASE WHEN current_mrr = 0 THEN 1.0 ELSE 0.0 END) / COUNT(*) AS logo_churn_rate\n    FROM retention\n    GROUP BY segment\n),\nsegment_activation AS (\n    SELECT segment,\n           AVG(CASE WHEN configured_date IS NOT NULL\n                         AND integrated_date IS NOT NULL\n                         AND configured_date <= DATE(signup_date, '+14 day')\n                         AND integrated_date <= DATE(signup_date, '+14 day')\n                    THEN 1.0 ELSE 0.0 END) AS activation_rate\n    FROM (\n        SELECT a.account_id, a.segment, a.signup_date,\n               MIN(CASE WHEN e.event_type = 'workspace_configured' THEN e.event_date END) AS configured_date,\n               MIN(CASE WHEN e.event_type = 'integration_connected' THEN e.event_date END) AS integrated_date\n        FROM accounts a LEFT JOIN product_events e USING (account_id), bounds b\n        WHERE a.signup_date <= DATE(b.latest_month, '-14 day')\n        GROUP BY a.account_id, a.segment, a.signup_date\n    )\n    GROUP BY segment\n)\nSELECT c.segment,\n       COUNT(*) AS active_accounts,\n       ROUND(SUM(c.mrr), 2) AS mrr,\n       ROUND(r.nrr, 4) AS nrr,\n       ROUND(r.logo_churn_rate, 4) AS logo_churn_rate,\n       ROUND(a.activation_rate, 4) AS activation_rate\nFROM current_base c\nJOIN segment_retention r USING (segment)\nJOIN segment_activation a USING (segment)\nGROUP BY c.segment, r.nrr, r.logo_churn_rate, a.activation_rate\nORDER BY mrr DESC",
+        "description": "Produces the reviewed segment health dataset.",
+        "tables_used": [
+          "accounts",
+          "product_events",
+          "subscription_monthly"
+        ],
+        "executed_at": "2025-12-31T23:59:59Z",
+        "filters": [
+          "Complete monthly data through 2025-12-31",
+          "Synthetic B2B SaaS accounts only"
+        ],
+        "metric_definitions": {
+          "MRR": "Sum of active monthly subscription revenue in the selected month.",
+          "NRR": "Current MRR from the prior-month customer base divided by that base's prior MRR.",
+          "Logo churn": "Prior-month active accounts absent in the current month divided by prior-month active accounts.",
+          "Activation": "Eligible signups completing workspace configuration and integration connection within 14 days.",
+          "Trial-to-paid": "Eligible signups with a paid date no later than 30 days after signup."
+        }
+      }
+    },
+    {
+      "id": "channel_health_sql",
+      "query": {
+        "engine": "sqlite",
+        "language": "sql",
+        "sql": "WITH bounds AS (\n    SELECT MAX(month) AS latest_month FROM subscription_monthly\n),\nactivation AS (\n    SELECT acquisition_channel,\n           COUNT(*) AS eligible_accounts,\n           AVG(CASE WHEN configured_date IS NOT NULL\n                         AND integrated_date IS NOT NULL\n                         AND configured_date <= DATE(signup_date, '+14 day')\n                         AND integrated_date <= DATE(signup_date, '+14 day')\n                    THEN 1.0 ELSE 0.0 END) AS activation_rate,\n           AVG(CASE WHEN paid_date IS NOT NULL\n                         AND paid_date <> ''\n                         AND paid_date <= DATE(signup_date, '+30 day')\n                    THEN 1.0 ELSE 0.0 END) AS trial_to_paid_rate\n    FROM (\n        SELECT a.account_id, a.acquisition_channel, a.signup_date, a.paid_date,\n               MIN(CASE WHEN e.event_type = 'workspace_configured' THEN e.event_date END) AS configured_date,\n               MIN(CASE WHEN e.event_type = 'integration_connected' THEN e.event_date END) AS integrated_date\n        FROM accounts a LEFT JOIN product_events e USING (account_id), bounds b\n        WHERE a.signup_date <= DATE(b.latest_month, '-30 day')\n        GROUP BY a.account_id, a.acquisition_channel, a.signup_date, a.paid_date\n    )\n    GROUP BY acquisition_channel\n)\nSELECT acquisition_channel, eligible_accounts,\n       ROUND(activation_rate, 4) AS activation_rate,\n       ROUND(trial_to_paid_rate, 4) AS trial_to_paid_rate\nFROM activation\nORDER BY activation_rate DESC",
+        "description": "Produces the reviewed channel health dataset.",
+        "tables_used": [
+          "accounts",
+          "product_events",
+          "subscription_monthly"
+        ],
+        "executed_at": "2025-12-31T23:59:59Z",
+        "filters": [
+          "Complete monthly data through 2025-12-31",
+          "Synthetic B2B SaaS accounts only"
+        ],
+        "metric_definitions": {
+          "MRR": "Sum of active monthly subscription revenue in the selected month.",
+          "NRR": "Current MRR from the prior-month customer base divided by that base's prior MRR.",
+          "Logo churn": "Prior-month active accounts absent in the current month divided by prior-month active accounts.",
+          "Activation": "Eligible signups completing workspace configuration and integration connection within 14 days.",
+          "Trial-to-paid": "Eligible signups with a paid date no later than 30 days after signup."
+        }
+      }
+    },
+    {
+      "id": "cohort_retention_sql",
+      "query": {
+        "engine": "sqlite",
+        "language": "sql",
+        "sql": "WITH paid_cohorts AS (\n    SELECT a.account_id, DATE(a.paid_date, 'start of month') AS cohort_month\n    FROM accounts a\n    WHERE a.paid_date IS NOT NULL AND a.paid_date <> ''\n      AND a.paid_date BETWEEN '2025-01-01' AND '2025-06-30'\n),\ncohort_sizes AS (\n    SELECT cohort_month, COUNT(*) AS cohort_size\n    FROM paid_cohorts\n    GROUP BY cohort_month\n),\nretention AS (\n    SELECT p.cohort_month,\n           (CAST(STRFTIME('%Y', s.month) AS INTEGER) - CAST(STRFTIME('%Y', p.cohort_month) AS INTEGER)) * 12\n           + CAST(STRFTIME('%m', s.month) AS INTEGER) - CAST(STRFTIME('%m', p.cohort_month) AS INTEGER)\n             AS month_number,\n           COUNT(DISTINCT s.account_id) AS retained_accounts\n    FROM paid_cohorts p\n    JOIN subscription_monthly s USING (account_id)\n    WHERE s.month >= p.cohort_month\n    GROUP BY p.cohort_month, month_number\n)\nSELECT r.cohort_month, r.month_number, r.retained_accounts, c.cohort_size,\n       ROUND(r.retained_accounts * 1.0 / c.cohort_size, 4) AS retention_rate\nFROM retention r\nJOIN cohort_sizes c USING (cohort_month)\nWHERE r.month_number BETWEEN 0 AND 6\nORDER BY r.cohort_month, r.month_number",
+        "description": "Produces the reviewed cohort retention dataset.",
+        "tables_used": [
+          "accounts",
+          "product_events",
+          "subscription_monthly"
+        ],
+        "executed_at": "2025-12-31T23:59:59Z",
+        "filters": [
+          "Complete monthly data through 2025-12-31",
+          "Synthetic B2B SaaS accounts only"
+        ],
+        "metric_definitions": {
+          "MRR": "Sum of active monthly subscription revenue in the selected month.",
+          "NRR": "Current MRR from the prior-month customer base divided by that base's prior MRR.",
+          "Logo churn": "Prior-month active accounts absent in the current month divided by prior-month active accounts.",
+          "Activation": "Eligible signups completing workspace configuration and integration connection within 14 days.",
+          "Trial-to-paid": "Eligible signups with a paid date no later than 30 days after signup."
+        }
+      }
+    },
+    {
+      "id": "risk_segments_sql",
+      "query": {
+        "engine": "sqlite",
+        "language": "sql",
+        "sql": "WITH bounds AS (\n    SELECT MAX(month) AS latest_month, DATE(MAX(month), '-1 month') AS previous_month\n    FROM subscription_monthly\n),\nactivation AS (\n    SELECT segment, acquisition_channel, COUNT(*) AS eligible_accounts,\n           AVG(CASE WHEN configured_date IS NOT NULL\n                         AND integrated_date IS NOT NULL\n                         AND configured_date <= DATE(signup_date, '+14 day')\n                         AND integrated_date <= DATE(signup_date, '+14 day')\n                    THEN 1.0 ELSE 0.0 END) AS activation_rate\n    FROM (\n        SELECT a.account_id, a.segment, a.acquisition_channel, a.signup_date,\n               MIN(CASE WHEN e.event_type = 'workspace_configured' THEN e.event_date END) AS configured_date,\n               MIN(CASE WHEN e.event_type = 'integration_connected' THEN e.event_date END) AS integrated_date\n        FROM accounts a LEFT JOIN product_events e USING (account_id), bounds b\n        WHERE a.signup_date <= DATE(b.latest_month, '-14 day')\n        GROUP BY a.account_id, a.segment, a.acquisition_channel, a.signup_date\n    )\n    GROUP BY segment, acquisition_channel\n),\nprevious_base AS (\n    SELECT a.segment, a.acquisition_channel, s.account_id, s.mrr\n    FROM subscription_monthly s JOIN accounts a USING (account_id), bounds b\n    WHERE s.month = b.previous_month\n),\ncurrent_base AS (\n    SELECT a.segment, a.acquisition_channel, s.account_id, s.mrr\n    FROM subscription_monthly s JOIN accounts a USING (account_id), bounds b\n    WHERE s.month = b.latest_month\n),\nretention AS (\n    SELECT p.segment, p.acquisition_channel, p.account_id, p.mrr AS previous_mrr,\n           COALESCE(c.mrr, 0.0) AS current_mrr\n    FROM previous_base p\n    LEFT JOIN current_base c\n      ON p.segment = c.segment\n     AND p.acquisition_channel = c.acquisition_channel\n     AND p.account_id = c.account_id\n)\nSELECT r.segment, r.acquisition_channel,\n       a.eligible_accounts,\n       ROUND(a.activation_rate, 4) AS activation_rate,\n       ROUND(SUM(CASE WHEN r.current_mrr = 0 THEN 1.0 ELSE 0.0 END) / COUNT(*), 4) AS logo_churn_rate,\n       ROUND(SUM(r.current_mrr) / NULLIF(SUM(r.previous_mrr), 0), 4) AS nrr,\n       ROUND(SUM(r.current_mrr), 2) AS current_mrr\nFROM retention r\nJOIN activation a USING (segment, acquisition_channel)\nGROUP BY r.segment, r.acquisition_channel, a.eligible_accounts, a.activation_rate\nHAVING COUNT(*) >= 12\nORDER BY activation_rate ASC, logo_churn_rate DESC",
+        "description": "Produces the reviewed risk segments dataset.",
+        "tables_used": [
+          "accounts",
+          "product_events",
+          "subscription_monthly"
+        ],
+        "executed_at": "2025-12-31T23:59:59Z",
+        "filters": [
+          "Complete monthly data through 2025-12-31",
+          "Synthetic B2B SaaS accounts only"
+        ],
+        "metric_definitions": {
+          "MRR": "Sum of active monthly subscription revenue in the selected month.",
+          "NRR": "Current MRR from the prior-month customer base divided by that base's prior MRR.",
+          "Logo churn": "Prior-month active accounts absent in the current month divided by prior-month active accounts.",
+          "Activation": "Eligible signups completing workspace configuration and integration connection within 14 days.",
+          "Trial-to-paid": "Eligible signups with a paid date no later than 30 days after signup."
+        }
+      }
+    }
+  ],
+  "package_info": {
+    "originUrl": "artifact://saas-retention-command-center",
+    "controls": {
+      "edit": false,
+      "refresh": false
+    }
+  }
+}
