@@ -61,8 +61,9 @@ python -m unittest discover -s tests -v
 python scripts/spot_check.py
 ```
 
-Open `dashboard.html` for the self-contained dashboard. It requires no server,
-CDN, credentials, or external data connection.
+Open `dashboard.html` for the self-contained responsive dashboard. It is
+generated from the current SQL outputs and requires no server, CDN,
+credentials, or external data connection.
 
 ## Repository map
 
@@ -72,10 +73,10 @@ CDN, credentials, or external data connection.
 ├── data/processed/            # reviewed SQL result datasets
 ├── docs/                      # KPI dictionary, chart map, validation
 ├── sql/analysis.sql           # complete analytical SQL
-├── src/saas_retention/        # generator and reproducible pipeline
-├── tests/                     # metric and reconciliation checks
-├── artifact.json              # canonical dashboard manifest + snapshot
-└── dashboard.html             # portable read-only dashboard
+├── src/saas_retention/        # generator, pipeline, and dashboard renderer
+├── tests/                     # metric and dashboard-generation checks
+├── artifact.json              # canonical metric manifest + snapshot
+└── dashboard.html             # portable responsive operating review
 ```
 
 ## Interpretation boundary

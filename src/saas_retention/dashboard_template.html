@@ -1,0 +1,591 @@
+<!--
+THESIS: Revenue health reads as an operating route, not a generic card grid.
+OWN-WORLD: Cool paper, midnight ink, route blue, signal coral, mint status, transport-signage type, and precise dividers.
+STORY: See the revenue pulse, read the operating state, diagnose drivers, inspect cohort durability, and act on the ranked risk.
+FIRST VIEWPORT: A dominant twelve-month MRR route fills two-thirds of the canvas; a navy status rail occupies the right; the intervention sits directly below.
+FORM: Grounded direction 5, asymmetric-focus staging, seed b90bace8.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="A SQL-backed operating review of synthetic SaaS growth and retention.">
+  <title>Retention Command Center</title>
+  <style>
+    :root {
+      --ink: #10243f; --navy: #0b2948; --blue: #1e61d2; --coral: #ef5b4c;
+      --mint: #1ba784; --amber: #e4a937; --paper: #f4f7fb; --white: #fff;
+      --slate: #5f7188; --divider: #d8e0eb; --divider-strong: #bbc8d8;
+      --display: Bahnschrift, "Arial Narrow", "Segoe UI", sans-serif;
+      --body: Aptos, "Segoe UI Variable", "Helvetica Neue", sans-serif;
+      --radius: 12px; --container: 1480px; --ease: cubic-bezier(.22, 1, .36, 1);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; min-width: 320px; background: var(--paper); color: var(--ink);
+      font: 16px/1.5 var(--body); -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    :focus-visible { outline: 3px solid rgba(30,97,210,.35); outline-offset: 3px; }
+    .shell { width: min(100% - 48px, var(--container)); margin-inline: auto; }
+
+    .topbar {
+      position: sticky; z-index: 20; top: 0; background: rgba(244,247,251,.96);
+      border-bottom: 1px solid var(--divider);
+    }
+    .topbar-inner {
+      min-height: 68px; display: flex; align-items: center; justify-content: space-between;
+      gap: 24px;
+    }
+    .brand {
+      display: inline-flex; align-items: center; gap: 11px; color: var(--ink);
+      text-decoration: none; font: 700 .88rem/1 var(--display); letter-spacing: .035em;
+    }
+    .brand-mark { width: 31px; height: 31px; flex: 0 0 auto; }
+    .topbar-meta {
+      display: flex; align-items: center; justify-content: flex-end; gap: 18px;
+      color: var(--slate); font-size: .78rem;
+    }
+    .data-status {
+      display: inline-flex; align-items: center; gap: 7px; padding: 5px 8px;
+      border: 1px solid var(--divider-strong); border-radius: 2px; background: var(--white);
+      color: var(--ink); font-size: .7rem; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .data-status::before {
+      width: 7px; height: 7px; border-radius: 50%; background: var(--amber); content: "";
+    }
+    .toolbar-link { color: var(--blue); font-size: .76rem; font-weight: 700; text-decoration: none; }
+    .toolbar-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+    main { overflow: clip; }
+    .intro {
+      display: grid; grid-template-columns: minmax(0,1.45fr) minmax(280px,.55fr);
+      gap: 48px; align-items: end; padding: 56px 0 36px;
+    }
+    .kicker {
+      display: inline-flex; align-items: center; gap: 10px; margin: 0 0 18px;
+      color: var(--blue); font-size: .72rem; font-weight: 800; letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .kicker::before { width: 42px; height: 2px; background: var(--blue); content: ""; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      max-width: 11ch; margin-bottom: 0; font-family: var(--display);
+      font-size: clamp(3rem,6vw,5.75rem); font-weight: 600; line-height: .94;
+      letter-spacing: -.035em; text-wrap: balance;
+    }
+    .intro-copy {
+      max-width: 54ch; margin: 0 0 6px; color: var(--slate);
+      font-size: clamp(1rem,1.3vw,1.16rem);
+    }
+    .intro-copy strong { color: var(--ink); font-weight: 650; }
+
+    .hero-grid {
+      display: grid; grid-template-columns: minmax(0,2.05fr) minmax(310px,.95fr);
+      gap: 18px; align-items: stretch;
+    }
+    .hero-panel {
+      min-width: 0; padding: clamp(22px,3vw,38px); border-radius: var(--radius);
+      background: var(--white); box-shadow: 0 22px 60px rgba(16,36,63,.10);
+    }
+    .panel-heading, .section-heading {
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 24px;
+    }
+    .label {
+      display: block; color: var(--slate); font-size: .7rem; font-weight: 800;
+      letter-spacing: .12em; line-height: 1.2; text-transform: uppercase;
+    }
+    .hero-value {
+      margin: 8px 0 2px; font: 600 clamp(3.2rem,6vw,6rem)/.9 var(--display);
+      font-variant-numeric: tabular-nums; letter-spacing: -.03em;
+    }
+    .delta {
+      display: inline-flex; align-items: center; gap: 7px; color: var(--coral);
+      font-size: .84rem; font-weight: 700;
+    }
+    .delta::before {
+      width: 10px; height: 2px; background: currentColor; content: ""; transform: rotate(45deg);
+    }
+    .chart-wrap { position: relative; min-height: 350px; margin-top: 20px; }
+    .chart-wrap svg { display: block; width: 100%; height: auto; overflow: visible; }
+    .route-grid { stroke: var(--divider); stroke-width: 1; }
+    .route-label { fill: var(--slate); font: 12px var(--body); }
+    .route-area { fill: var(--blue); opacity: .07; }
+    .route-line {
+      fill: none; stroke: var(--blue); stroke-linecap: round; stroke-linejoin: round;
+      stroke-width: 4; path-length: 1; stroke-dasharray: 1; stroke-dashoffset: 0;
+    }
+    .route-point { fill: var(--white); stroke: var(--blue); stroke-width: 3; }
+    .route-point.current { fill: var(--coral); stroke: var(--white); stroke-width: 4; }
+    .route-end-label { fill: var(--ink); font: 700 20px var(--display); }
+    .route-end-sub { fill: var(--coral); font: 700 12px var(--body); }
+
+    .status-rail {
+      display: flex; flex-direction: column; min-width: 0; padding: 24px;
+      border-radius: var(--radius); background: var(--navy); color: var(--white);
+    }
+    .status-rail .label { color: #b8cae0; }
+    .status-rail h2 {
+      max-width: 12ch; margin: 11px 0 28px; font: 600 clamp(1.6rem,3vw,2.5rem)/1.03 var(--display);
+      letter-spacing: -.02em;
+    }
+    .status-list { display: grid; flex: 1; grid-template-rows: repeat(4,1fr); }
+    .status-item {
+      display: grid; grid-template-columns: 12px 1fr auto; gap: 12px; align-items: center;
+      padding: 19px 0; border-top: 1px solid rgba(255,255,255,.14);
+    }
+    .status-dot {
+      width: 9px; height: 9px; border-radius: 50%; background: var(--mint);
+      box-shadow: 0 0 0 4px rgba(27,167,132,.16);
+    }
+    .status-item.watch .status-dot { background: var(--amber); box-shadow: 0 0 0 4px rgba(228,169,55,.16); }
+    .status-item.risk .status-dot { background: var(--coral); box-shadow: 0 0 0 4px rgba(239,91,76,.16); }
+    .status-name { font-size: .86rem; font-weight: 700; }
+    .status-note { display: block; margin-top: 3px; color: #b8cae0; font-size: .72rem; }
+    .status-value { font: 600 clamp(1.6rem,2.2vw,2.15rem)/1 var(--display); font-variant-numeric: tabular-nums; }
+
+    .decision {
+      display: grid; grid-template-columns: auto minmax(0,1fr) auto; gap: 20px; align-items: center;
+      margin-top: 18px; padding: 24px 26px; border: 1px solid #f6b0aa;
+      border-radius: var(--radius); background: #fff0ee;
+    }
+    .decision-marker {
+      display: grid; width: 44px; height: 44px; place-items: center; border-radius: 50%;
+      background: var(--coral); color: var(--white); font: 700 1.2rem var(--display);
+    }
+    .decision h2 {
+      margin-bottom: 5px; font: 600 clamp(1.3rem,2.5vw,2rem)/1.08 var(--display);
+      letter-spacing: -.02em;
+    }
+    .decision p { max-width: 76ch; margin: 0; color: #6e3a36; }
+    .decision-tag {
+      padding: 6px 9px; border-radius: 2px; background: var(--coral); color: var(--white);
+      font-size: .68rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .section { padding-top: 78px; }
+    .section-heading { align-items: end; margin-bottom: 24px; }
+    .section-heading h2 {
+      max-width: 14ch; margin: 0; font: 600 clamp(2rem,4vw,3.5rem)/1 var(--display);
+      letter-spacing: -.03em; text-wrap: balance;
+    }
+    .section-heading p { max-width: 56ch; margin: 0; color: var(--slate); }
+    .driver-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 18px; }
+    .data-panel {
+      min-width: 0; padding: 28px; border: 1px solid var(--divider);
+      border-radius: var(--radius); background: var(--white);
+    }
+    .data-panel h3 { margin-bottom: 5px; font: 600 1.35rem/1.2 var(--display); letter-spacing: -.015em; }
+    .panel-copy { margin: 0 0 26px; color: var(--slate); font-size: .88rem; }
+
+    .bar-chart { display: grid; gap: 21px; }
+    .bar-row {
+      display: grid; grid-template-columns: minmax(90px,.8fr) minmax(170px,2.2fr) 64px;
+      gap: 14px; align-items: center;
+    }
+    .bar-label { font-size: .86rem; font-weight: 650; }
+    .bar-track { position: relative; height: 13px; background: #edf1f6; overflow: hidden; }
+    .bar-track::after {
+      position: absolute; top: -3px; bottom: -3px; left: var(--target,70%);
+      border-left: 1px dashed var(--divider-strong); content: "";
+    }
+    .bar-fill { width: var(--bar); height: 100%; background: var(--blue); transform-origin: left; }
+    .bar-fill.risk { background: var(--coral); }
+    .bar-fill.healthy { background: var(--mint); }
+    .bar-value { text-align: right; font: 700 1rem var(--display); font-variant-numeric: tabular-nums; }
+    .legend {
+      display: flex; flex-wrap: wrap; gap: 16px; margin-top: 26px; padding-top: 18px;
+      border-top: 1px solid var(--divider); color: var(--slate); font-size: .72rem;
+    }
+    .legend span { display: inline-flex; align-items: center; gap: 7px; }
+    .legend i { width: 18px; height: 2px; background: var(--divider-strong); }
+    .legend .solid { background: var(--blue); } .legend .risk { background: var(--coral); }
+
+    .cohort-layout {
+      display: grid; grid-template-columns: minmax(0,1.55fr) minmax(330px,.75fr);
+      gap: 18px; align-items: stretch;
+    }
+    .matrix-scroll, .risk-table-scroll { overflow-x: auto; overscroll-behavior-inline: contain; }
+    .cohort-table, .risk-table {
+      width: 100%; border-collapse: separate; border-spacing: 5px;
+      font-size: .76rem; font-variant-numeric: tabular-nums;
+    }
+    .cohort-table th {
+      min-width: 48px; padding: 7px 5px; color: var(--slate);
+      font-size: .68rem; font-weight: 750; text-align: center;
+    }
+    .cohort-table th:first-child {
+      position: sticky; z-index: 2; left: 0; min-width: 92px; background: var(--white);
+      color: var(--ink); text-align: left;
+    }
+    .cohort-table td { min-width: 48px; padding: 11px 7px; border-radius: 2px; text-align: center; }
+    .cohort-table td.empty { background: #f3f5f8; color: #9aa7b7; }
+
+    .risk-stack { display: grid; gap: 8px; }
+    .risk-row {
+      display: grid; grid-template-columns: 34px minmax(0,1fr) auto; gap: 13px;
+      align-items: center; padding: 15px 0; border-top: 1px solid var(--divider);
+    }
+    .risk-row:first-child { border-top: 0; }
+    .rank {
+      display: grid; width: 29px; height: 29px; place-items: center; border-radius: 50%;
+      background: var(--ink); color: var(--white); font: 700 .82rem var(--display);
+    }
+    .risk-row:first-child .rank { background: var(--coral); }
+    .risk-name { display: block; font-weight: 750; }
+    .risk-meta { display: block; margin-top: 3px; color: var(--slate); font-size: .72rem; }
+    .risk-score { text-align: right; }
+    .risk-score strong { display: block; font: 700 1.22rem var(--display); font-variant-numeric: tabular-nums; }
+    .risk-score small { color: var(--slate); }
+
+    .detail-panel { margin-top: 18px; }
+    .risk-table { border-spacing: 0; font-size: .79rem; }
+    .risk-table th, .risk-table td {
+      padding: 13px 12px; border-bottom: 1px solid var(--divider);
+      text-align: right; white-space: nowrap;
+    }
+    .risk-table th { color: var(--slate); font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; }
+    .risk-table th:nth-child(-n+3), .risk-table td:nth-child(-n+3) { text-align: left; }
+    .risk-table tr:first-child td { background: #fff0ee; }
+    .route-rank {
+      display: inline-grid; width: 24px; height: 24px; place-items: center;
+      border-radius: 50%; background: var(--ink); color: var(--white); font-weight: 800;
+    }
+    .risk-table tr:first-child .route-rank { background: var(--coral); }
+
+    details { margin-top: 20px; border-top: 1px solid var(--divider); color: var(--slate); font-size: .78rem; }
+    summary { padding: 13px 0 0; color: var(--blue); cursor: pointer; font-weight: 700; }
+    .accessible-data { margin-top: 12px; overflow-x: auto; }
+    .accessible-data table { width: 100%; border-collapse: collapse; }
+    .accessible-data th, .accessible-data td {
+      padding: 8px; border-bottom: 1px solid var(--divider); text-align: left; white-space: nowrap;
+    }
+
+    .footer { margin-top: 82px; border-top: 1px solid var(--divider-strong); background: var(--white); }
+    .footer-inner {
+      display: grid; grid-template-columns: minmax(0,1.4fr) minmax(280px,.6fr);
+      gap: 48px; padding: 36px 0 44px;
+    }
+    .footer h2 { margin-bottom: 8px; font: 600 1.35rem var(--display); letter-spacing: -.015em; }
+    .footer p { max-width: 72ch; margin-bottom: 0; color: var(--slate); font-size: .86rem; }
+    .footer-links { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 18px; align-content: start; }
+    .footer-links a { color: var(--blue); font-size: .78rem; font-weight: 750; text-decoration: none; }
+    .footer-links a:hover { text-decoration: underline; text-underline-offset: 4px; }
+    .noscript { margin: 20px auto; padding: 14px; background: #fff0ee; color: #6e3a36; text-align: center; }
+
+    @media (prefers-reduced-motion:no-preference) {
+      .route-line { stroke-dashoffset: 1; animation: draw-route 800ms var(--ease) 160ms forwards; }
+      .route-point { opacity: 0; animation: show-point 280ms ease-out forwards; }
+      .bar-fill { animation: grow-bar 700ms var(--ease) both; }
+    }
+    @keyframes draw-route { to { stroke-dashoffset: 0; } }
+    @keyframes show-point { to { opacity: 1; } }
+    @keyframes grow-bar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+    @media (max-width:960px) {
+      .intro { grid-template-columns: 1fr; gap: 20px; padding-top: 42px; }
+      h1 { max-width: 13ch; } .intro-copy { max-width: 70ch; }
+      .hero-grid { grid-template-columns: 1fr; }
+      .status-rail { min-height: auto; }
+      .status-rail h2 { max-width: none; margin-bottom: 18px; }
+      .status-list { grid-template-columns: repeat(4,1fr); grid-template-rows: 1fr; }
+      .status-item {
+        grid-template-columns: 12px 1fr; align-content: start; padding: 17px 14px;
+        border-top: 1px solid rgba(255,255,255,.14); border-right: 1px solid rgba(255,255,255,.14);
+      }
+      .status-item:last-child { border-right: 0; }
+      .status-value { grid-column: 2; }
+      .cohort-layout { grid-template-columns: 1fr; }
+    }
+    @media (max-width:720px) {
+      .shell { width: min(100% - 28px,var(--container)); }
+      .topbar-inner { min-height: 58px; }
+      .brand span, .topbar-meta time, .toolbar-link { display: none; }
+      .intro { padding: 34px 0 24px; }
+      h1 { font-size: clamp(2.75rem,14vw,4rem); }
+      .hero-panel { padding: 20px 15px 18px; }
+      .panel-heading { align-items: end; }
+      .hero-value { font-size: clamp(3rem,16vw,4.6rem); }
+      .chart-wrap { min-height: 0; margin-top: 12px; }
+      .status-list { grid-template-columns: repeat(2,1fr); }
+      .status-item:nth-child(2) { border-right: 0; }
+      .status-value { font-size: 1.75rem; }
+      .decision { grid-template-columns: auto 1fr; padding: 20px; }
+      .decision-tag { grid-column: 2; justify-self: start; }
+      .section { padding-top: 58px; }
+      .section-heading { display: block; }
+      .section-heading h2 { max-width: 18ch; margin-bottom: 12px; }
+      .driver-grid { grid-template-columns: 1fr; }
+      .data-panel { padding: 22px 18px; }
+      .bar-row { grid-template-columns: 86px minmax(120px,1fr) 56px; gap: 9px; }
+      .footer-inner { grid-template-columns: 1fr; gap: 22px; }
+      .footer-links { justify-content: flex-start; }
+    }
+    @media (max-width:430px) {
+      .status-list { grid-template-columns: 1fr; }
+      .status-item { border-right: 0; }
+      .decision-marker { width: 36px; height: 36px; }
+      .bar-row { grid-template-columns: 76px minmax(100px,1fr) 48px; }
+      .bar-label { font-size: .76rem; }
+    }
+    @media print {
+      .topbar { position: static; } .shell { width: 100%; }
+      .hero-panel { box-shadow: none; border: 1px solid var(--divider); }
+      .section { break-inside: avoid; } .footer { margin-top: 40px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="#overview" aria-label="Retention Command Center overview">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M3 5l8 5v17l-8-5z" fill="#10243f"/>
+          <path d="M11 10l10-6v17l-10 6z" fill="#1e61d2"/>
+          <path d="M21 4l8 5v17l-8-5z" fill="#0b2948"/>
+          <circle cx="21" cy="21" r="2.6" fill="#ef5b4c"/>
+        </svg>
+        <span>Retention Command Center</span>
+      </a>
+      <div class="topbar-meta">
+        <time datetime="2025-12-31">Data through Dec 2025</time>
+        <span class="data-status">Synthetic data</span>
+        <a class="toolbar-link" href="sql/analysis.sql">View SQL</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="overview">
+    <section class="shell intro" aria-labelledby="page-title">
+      <div>
+        <p class="kicker">Monthly operating review</p>
+        <h1 id="page-title">Retention Command Center</h1>
+      </div>
+      <p class="intro-copy"><strong>Revenue has reached $315.1K MRR, but December softened.</strong> Read the operating state, trace the driver, and choose the next growth intervention.</p>
+    </section>
+
+    <section class="shell" aria-label="Executive overview">
+      <div class="hero-grid">
+        <article class="hero-panel">
+          <div class="panel-heading">
+            <div>
+              <span class="label">Monthly recurring revenue</span>
+              <p class="hero-value" id="mrr-value">$315.14K</p>
+              <span class="delta" id="mrr-delta">1.2% month over month</span>
+            </div>
+            <span class="label">12 complete months · USD</span>
+          </div>
+          <div class="chart-wrap" id="mrr-chart" aria-live="polite"></div>
+          <details>
+            <summary>View monthly revenue data</summary>
+            <div class="accessible-data" id="mrr-data-table"></div>
+          </details>
+        </article>
+
+        <aside class="status-rail" aria-labelledby="status-title">
+          <span class="label">Operating status</span>
+          <h2 id="status-title">Retention is stable. Acquisition quality is not.</h2>
+          <div class="status-list" id="status-list"></div>
+        </aside>
+      </div>
+
+      <article class="decision" aria-labelledby="decision-title">
+        <span class="decision-marker" aria-hidden="true">1</span>
+        <div>
+          <h2 id="decision-title">Fix SMB / Paid Search activation before buying more traffic.</h2>
+          <p id="decision-copy">This group has the weakest activation in the reviewed segment-channel set. Use it to target an onboarding experiment, not as causal proof.</p>
+        </div>
+        <span class="decision-tag">Priority intervention</span>
+      </article>
+    </section>
+
+    <section class="shell section" id="drivers" aria-labelledby="drivers-title">
+      <header class="section-heading">
+        <h2 id="drivers-title">Where performance diverges</h2>
+        <p>Enterprise retention is holding. Paid Search activation is the clearest weakness, suggesting a quality or onboarding problem before a scale problem.</p>
+      </header>
+      <div class="driver-grid">
+        <article class="data-panel">
+          <span class="label">Customer mix</span>
+          <h3>Net revenue retention by segment</h3>
+          <p class="panel-copy">Latest month compared with the prior-month customer base.</p>
+          <div class="bar-chart" id="segment-bars"></div>
+          <div class="legend"><span><i class="solid"></i>Observed NRR</span><span><i></i>100% reference</span></div>
+        </article>
+        <article class="data-panel">
+          <span class="label">Acquisition quality</span>
+          <h3>14-day activation by channel</h3>
+          <p class="panel-copy">Both onboarding milestones completed within 14 days.</p>
+          <div class="bar-chart" id="channel-bars"></div>
+          <div class="legend"><span><i class="solid"></i>Healthy / watch</span><span><i class="risk"></i>Priority risk</span><span><i></i>70% reference</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="shell section" id="cohorts" aria-labelledby="cohorts-title">
+      <header class="section-heading">
+        <h2 id="cohorts-title">Durability and action queue</h2>
+        <p>Cohorts remain descriptive, but they show whether the growth system is building durable customer value and where an analyst should investigate next.</p>
+      </header>
+      <div class="cohort-layout">
+        <article class="data-panel">
+          <span class="label">Paid-customer cohorts</span>
+          <h3>Retention after first paid month</h3>
+          <p class="panel-copy">January–June 2025 cohorts; columns are months since first payment.</p>
+          <div class="matrix-scroll" id="cohort-matrix"></div>
+          <div class="legend">
+            <span><i style="background:#1ba784"></i>90%+</span>
+            <span><i style="background:#e4a937"></i>80–89%</span>
+            <span><i style="background:#ef5b4c"></i>Below 80%</span>
+          </div>
+        </article>
+        <aside class="data-panel">
+          <span class="label">Ranked investigation queue</span>
+          <h3>Weakest activation groups</h3>
+          <p class="panel-copy">Prioritized for review, not interpreted as causal effects.</p>
+          <div class="risk-stack" id="risk-stack"></div>
+        </aside>
+      </div>
+
+      <article class="data-panel detail-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="label">Analyst handoff</span>
+            <h3>Complete segment-channel queue</h3>
+          </div>
+          <a class="toolbar-link" href="data/processed/risk_segments.csv" download>Download CSV</a>
+        </div>
+        <div class="risk-table-scroll" id="risk-table"></div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="shell footer-inner">
+      <div>
+        <h2>Interpretation boundary</h2>
+        <p>This dataset is deterministic and synthetic. Segment differences are descriptive and suitable for prioritizing an experiment; they do not establish causal channel or onboarding effects.</p>
+      </div>
+      <nav class="footer-links" aria-label="Project resources">
+        <a href="README.md">Read methodology</a>
+        <a href="docs/metric_dictionary.md">Metric dictionary</a>
+        <a href="outputs/validation_summary.json">Validation results</a>
+      </nav>
+    </div>
+  </footer>
+
+  <noscript><p class="noscript">This standalone dashboard requires JavaScript to render its source-backed charts.</p></noscript>
+
+  <script>window.__DASHBOARD_DATA__ = __DASHBOARD_PAYLOAD__;</script>
+  <script>
+    (() => {
+      "use strict";
+      const data = window.__DASHBOARD_DATA__;
+      const $ = (selector) => document.querySelector(selector);
+      const money = (value, digits = 1) => {
+        const absolute = Math.abs(Number(value));
+        return absolute >= 1000 ? `$${(absolute / 1000).toFixed(digits)}K` : `$${absolute.toFixed(0)}`;
+      };
+      const pct = (value, digits = 1) => `${(Number(value) * 100).toFixed(digits)}%`;
+      const monthLabel = (iso, short = false) => {
+        const date = new Date(`${iso}T00:00:00Z`);
+        return date.toLocaleDateString("en-US", {month: short ? "short" : "long", year: short ? undefined : "numeric", timeZone: "UTC"});
+      };
+      const escapeHtml = (value) => String(value)
+        .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+
+      function renderHeadline() {
+        const h = data.headline;
+        $("#mrr-value").textContent = money(h.mrr, 2);
+        $("#mrr-delta").textContent = `${Math.abs(h.mrr_mom_growth * 100).toFixed(1)}% month over month`;
+        const metrics = [
+          {name:"Net revenue retention",note:"Prior-month revenue base",value:pct(h.nrr),state:h.nrr >= 1 ? "healthy" : "watch"},
+          {name:"Logo churn",note:"Prior active accounts lost",value:pct(h.logo_churn_rate),state:h.logo_churn_rate <= .03 ? "healthy" : "risk"},
+          {name:"14-day activation",note:`${h.activated_accounts} of ${h.eligible_accounts} eligible`,value:pct(h.activation_rate),state:h.activation_rate >= .7 ? "healthy" : "risk"},
+          {name:"Trial-to-paid",note:`${h.converted_trials} of ${h.eligible_trials} eligible`,value:pct(h.trial_to_paid_rate),state:h.trial_to_paid_rate >= .6 ? "healthy" : "watch"}
+        ];
+        $("#status-list").innerHTML = metrics.map(metric => `
+          <div class="status-item ${metric.state}">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span><span class="status-name">${escapeHtml(metric.name)}</span><small class="status-note">${escapeHtml(metric.note)} · ${escapeHtml(metric.state)}</small></span>
+            <strong class="status-value">${escapeHtml(metric.value)}</strong>
+          </div>`).join("");
+        const lead = data.risks[0];
+        $("#decision-title").textContent = `Fix ${lead.segment} / ${lead.acquisition_channel} activation before buying more traffic.`;
+        $("#decision-copy").textContent = `Activation is ${pct(lead.activation_rate)} with ${pct(lead.nrr)} NRR and ${pct(lead.logo_churn_rate)} logo churn. Use this as a targeting signal for an onboarding experiment, not causal proof.`;
+      }
+
+      function renderLineChart() {
+        const rows = data.monthly, width = 900, height = 390;
+        const pad = {top:32,right:74,bottom:54,left:72};
+        const plotW = width-pad.left-pad.right, plotH = height-pad.top-pad.bottom;
+        const maxValue = Math.ceil(Math.max(...rows.map(d => d.mrr))/90000)*90000;
+        const x = index => pad.left+(index/(rows.length-1))*plotW;
+        const y = value => pad.top+plotH-(value/maxValue)*plotH;
+        const points = rows.map((row,index) => [x(index),y(row.mrr)]);
+        const linePath = points.map((point,index) => `${index ? "L" : "M"}${point[0].toFixed(1)},${point[1].toFixed(1)}`).join(" ");
+        const areaPath = `${linePath} L${points.at(-1)[0].toFixed(1)},${pad.top+plotH} L${points[0][0].toFixed(1)},${pad.top+plotH} Z`;
+        const ticks = [0,maxValue*.25,maxValue*.5,maxValue*.75,maxValue];
+        const current = rows.at(-1);
+        $("#mrr-chart").innerHTML = `
+          <svg viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="mrr-chart-title mrr-chart-desc">
+            <title id="mrr-chart-title">Monthly recurring revenue, January through December 2025</title>
+            <desc id="mrr-chart-desc">MRR rises from ${money(rows[0].mrr)} to ${money(current.mrr)} and declines slightly in December.</desc>
+            ${ticks.map(tick => `<line class="route-grid" x1="${pad.left}" y1="${y(tick)}" x2="${width-pad.right}" y2="${y(tick)}"></line><text class="route-label" x="${pad.left-13}" y="${y(tick)+4}" text-anchor="end">${tick === 0 ? "$0" : money(tick,0)}</text>`).join("")}
+            ${rows.map((row,index) => index%2===0 || index===rows.length-1 ? `<text class="route-label" x="${x(index)}" y="${height-18}" text-anchor="${index===0?"start":index===rows.length-1?"end":"middle"}">${monthLabel(row.month,true)}</text>` : "").join("")}
+            <path class="route-area" d="${areaPath}"></path>
+            <path class="route-line" pathLength="1" d="${linePath}"></path>
+            ${rows.map((row,index) => `<circle class="route-point ${index===rows.length-1?"current":""}" cx="${x(index)}" cy="${y(row.mrr)}" r="${index===rows.length-1?7:4.5}" style="animation-delay:${260+index*45}ms" tabindex="0"><title>${monthLabel(row.month)}: ${money(row.mrr,2)} MRR, ${row.active_accounts} active accounts</title></circle>`).join("")}
+            <text class="route-end-label" x="${points.at(-1)[0]-4}" y="${points.at(-1)[1]-22}" text-anchor="end">${money(current.mrr,2)}</text>
+            <text class="route-end-sub" x="${points.at(-1)[0]-4}" y="${points.at(-1)[1]-7}" text-anchor="end">−1.2% MoM</text>
+          </svg>`;
+        $("#mrr-data-table").innerHTML = `<table><thead><tr><th>Month</th><th>MRR</th><th>Active accounts</th><th>New signups</th><th>Churned</th></tr></thead><tbody>${rows.map(row => `<tr><td>${escapeHtml(monthLabel(row.month))}</td><td>${money(row.mrr,2)}</td><td>${row.active_accounts}</td><td>${row.new_accounts}</td><td>${row.churned_accounts}</td></tr>`).join("")}</tbody></table>`;
+      }
+
+      function renderBars(target, rows, valueField, labelField, reference, riskRule) {
+        const maximum = Math.max(reference*1.2, ...rows.map(row => Number(row[valueField])));
+        $(target).innerHTML = rows.map((row,index) => {
+          const value = Number(row[valueField]);
+          const state = riskRule(row,index) ? "risk" : value >= reference ? "healthy" : "";
+          return `<div class="bar-row"><span class="bar-label">${escapeHtml(row[labelField])}</span><div class="bar-track" style="--target:${Math.min(100,reference/maximum*100)}%" aria-hidden="true"><div class="bar-fill ${state}" style="--bar:${Math.max(2,value/maximum*100)}%;animation-delay:${index*80}ms"></div></div><strong class="bar-value">${pct(value)}</strong></div>`;
+        }).join("");
+      }
+
+      const heatColor = value => value >= .9 ? {bg:"#d8f2ea",fg:"#0b5d49"} : value >= .8 ? {bg:"#fff0c6",fg:"#72510a"} : {bg:"#ffe0dc",fg:"#84382f"};
+
+      function renderCohorts() {
+        const rows = data.cohorts;
+        const cohorts = [...new Set(rows.map(row => row.cohort_month))];
+        const months = [...new Set(rows.map(row => row.month_number))].sort((a,b) => a-b);
+        const lookup = new Map(rows.map(row => [`${row.cohort_month}:${row.month_number}`,row]));
+        $("#cohort-matrix").innerHTML = `<table class="cohort-table"><thead><tr><th>Paid cohort</th>${months.map(month => `<th>${month}</th>`).join("")}</tr></thead><tbody>${cohorts.map(cohort => `<tr><th scope="row">${escapeHtml(monthLabel(cohort,true))}</th>${months.map(month => {
+          const cell = lookup.get(`${cohort}:${month}`);
+          if (!cell) return `<td class="empty">—</td>`;
+          const color = heatColor(cell.retention_rate);
+          return `<td style="background:${color.bg};color:${color.fg}" title="${monthLabel(cohort)} cohort, month ${month}: ${pct(cell.retention_rate)} retained">${pct(cell.retention_rate,0)}</td>`;
+        }).join("")}</tr>`).join("")}</tbody></table>`;
+      }
+
+      function renderRisks() {
+        const rows = data.risks;
+        $("#risk-stack").innerHTML = rows.slice(0,5).map((row,index) => `<div class="risk-row"><span class="rank">${index+1}</span><span><strong class="risk-name">${escapeHtml(row.segment)} / ${escapeHtml(row.acquisition_channel)}</strong><small class="risk-meta">NRR ${pct(row.nrr)} · churn ${pct(row.logo_churn_rate)}</small></span><span class="risk-score"><strong>${pct(row.activation_rate)}</strong><small>activation</small></span></div>`).join("");
+        $("#risk-table").innerHTML = `<table class="risk-table"><thead><tr><th>Rank</th><th>Segment</th><th>Channel</th><th>Eligible</th><th>Activation</th><th>Logo churn</th><th>NRR</th><th>Current MRR</th></tr></thead><tbody>${rows.map((row,index) => `<tr><td><span class="route-rank">${index+1}</span></td><td>${escapeHtml(row.segment)}</td><td>${escapeHtml(row.acquisition_channel)}</td><td>${row.eligible_accounts}</td><td>${pct(row.activation_rate)}</td><td>${pct(row.logo_churn_rate)}</td><td>${pct(row.nrr)}</td><td>${money(row.current_mrr,2)}</td></tr>`).join("")}</tbody></table>`;
+      }
+
+      renderHeadline();
+      renderLineChart();
+      renderBars("#segment-bars",data.segments,"nrr","segment",1,() => false);
+      renderBars("#channel-bars",data.channels,"activation_rate","acquisition_channel",.7,row => row.activation_rate < .65);
+      renderCohorts();
+      renderRisks();
+    })();
+  </script>
+</body>
+</html>

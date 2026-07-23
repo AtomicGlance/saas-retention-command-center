@@ -10,6 +10,7 @@ from typing import Any
 
 import pandas as pd
 
+from .dashboard import render_dashboard
 from .generate_data import GenerationConfig, generate_dataset
 
 
@@ -64,12 +65,18 @@ def run_pipeline(project_root: Path, seed: int = 42) -> dict[str, Any]:
     artifact = build_artifact(results, queries)
     artifact_path = project_root / "artifact.json"
     artifact_path.write_text(json.dumps(artifact, indent=2, ensure_ascii=False), encoding="utf-8")
+    dashboard_path = render_dashboard(results, project_root / "dashboard.html")
 
     summary = validate_results(results)
     (output_dir / "validation_summary.json").write_text(
         json.dumps(summary, indent=2), encoding="utf-8"
     )
-    return {"artifact": artifact_path, "summary": summary, "results": results}
+    return {
+        "artifact": artifact_path,
+        "dashboard": dashboard_path,
+        "summary": summary,
+        "results": results,
+    }
 
 
 def build_artifact(

@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-23T00:00:00Z",
+  "title": "Design System: Retention Command Center",
+  "extensions": {
+    "colorMeta": {
+      "route-blue": {
+        "role": "primary",
+        "displayName": "Route Blue",
+        "canonical": "#1e61d2",
+        "tonalRamp": ["#07172f", "#0c2c65", "#124299", "#1858c0", "#1e61d2", "#5d8fe0", "#a7c1ee", "#edf3fc"]
+      },
+      "signal-coral": {
+        "role": "secondary",
+        "displayName": "Signal Coral",
+        "canonical": "#ef5b4c",
+        "tonalRamp": ["#35100d", "#6e211a", "#a9362d", "#d84c3f", "#ef5b4c", "#f58c82", "#fac0ba", "#fff1ef"]
+      },
+      "healthy-mint": {
+        "role": "tertiary",
+        "displayName": "Healthy Mint",
+        "canonical": "#1ba784",
+        "tonalRamp": ["#05271f", "#0b4f40", "#10775e", "#168f72", "#1ba784", "#5ac3a9", "#a7e1d2", "#eefaf7"]
+      },
+      "cool-paper": {
+        "role": "neutral",
+        "displayName": "Cool Paper",
+        "canonical": "#f4f7fb",
+        "tonalRamp": ["#17202d", "#303c4c", "#4d5b6d", "#5f7188", "#96a4b6", "#c4cfdd", "#e4eaf2", "#f4f7fb"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Transport Display",
+        "purpose": "Revenue-scale numbers and major operating decisions."
+      },
+      "body": {
+        "displayName": "Workhorse Body",
+        "purpose": "Explanations, annotations, and dense analytical text."
+      }
+    },
+    "shadows": [
+      {
+        "name": "briefing-hero",
+        "value": "0 22px 60px rgba(16,36,63,0.10)",
+        "purpose": "Only for the dominant first-viewport analytical panel."
+      }
+    ],
+    "motion": [
+      {
+        "name": "route-reveal",
+        "value": "700ms cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "One orchestrated reveal for the primary revenue trace."
+      }
+    ],
+    "breakpoints": [
+      {"name": "compact", "value": "720px"},
+      {"name": "rail-collapse", "value": "960px"}
+    ]
+  },
+  "components": [
+    {
+      "name": "Metric Card",
+      "kind": "card",
+      "refersTo": "metric-card",
+      "description": "A precise KPI surface with one headline value and one state.",
+      "html": "<article class=\"ds-metric\"><span class=\"ds-label\">NET REVENUE RETENTION</span><strong>98.8%</strong><small>Prior-month revenue base</small></article>",
+      "css": ".ds-metric{font-family:Aptos,'Segoe UI',sans-serif;background:#fff;color:#10243f;border:1px solid #d8e0eb;border-radius:12px;padding:20px;display:grid;gap:8px}.ds-metric strong{font-family:Bahnschrift,'Arial Narrow',sans-serif;font-size:2.4rem;font-variant-numeric:tabular-nums}.ds-label{font-size:.72rem;font-weight:700;letter-spacing:.12em}.ds-metric:focus-within{outline:3px solid rgba(30,97,210,.28);outline-offset:3px}"
+    },
+    {
+      "name": "Risk Chip",
+      "kind": "chip",
+      "refersTo": "risk-chip",
+      "description": "Compact underperformance signal used only with explicit risk text.",
+      "html": "<span class=\"ds-risk\">ACTION REQUIRED</span>",
+      "css": ".ds-risk{display:inline-block;background:#ef5b4c;color:#fff;border-radius:2px;padding:5px 8px;font:700 .7rem/1 Aptos,'Segoe UI',sans-serif;letter-spacing:.1em}"
+    },
+    {
+      "name": "Status Rail",
+      "kind": "custom",
+      "refersTo": "status-rail",
+      "description": "High-contrast operating-state summary beside the primary chart.",
+      "html": "<aside class=\"ds-rail\"><span>OPERATING STATUS</span><strong>98.8%</strong><small>NRR · WATCH</small></aside>",
+      "css": ".ds-rail{font-family:Aptos,'Segoe UI',sans-serif;background:#0b2948;color:#fff;border-radius:12px;padding:20px;display:grid;gap:10px}.ds-rail>span{font-size:.7rem;font-weight:700;letter-spacing:.12em}.ds-rail strong{font:600 2.5rem/.95 Bahnschrift,'Arial Narrow',sans-serif}.ds-rail small{color:#a7e1d2}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Metropolitan Operations Briefing",
+    "overview": "A premium operating review with the clarity of transit information: decisive routes, explicit states, legible numbers, and enough civic confidence to be memorable.",
+    "keyCharacteristics": [
+      "One dominant analytical story per viewport.",
+      "Route blue for primary analytical movement.",
+      "Signal colors always carry operational meaning.",
+      "Transport-signage labels paired with large tabular figures."
+    ],
+    "rules": [
+      {"name": "Signal Integrity", "body": "Signal colors always communicate a state and are never decorative.", "section": "colors"},
+      {"name": "Numeric Priority", "body": "Important numbers are larger than their labels.", "section": "typography"},
+      {"name": "Briefing Sequence", "body": "Order content as pulse, movement, drivers, cohort durability, then action queue.", "section": "layout"}
+    ],
+    "dos": [
+      "Do give the revenue trajectory the strongest visual weight.",
+      "Do preserve source-backed numbers and the synthetic-data disclosure."
+    ],
+    "donts": [
+      "Don't use generic dark SaaS card grids as the main composition.",
+      "Don't add neon glows, glassmorphism, gradients, or ornamental dashboard icons."
+    ]
+  }
+}

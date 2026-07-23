@@ -32,10 +32,13 @@ class RetentionPipelineTest(unittest.TestCase):
             result = run_pipeline(root, seed=42)
             self.assertEqual(result["summary"]["status"], "ready_to_share")
             self.assertTrue(result["artifact"].exists())
+            self.assertTrue(result["dashboard"].exists())
+            dashboard = result["dashboard"].read_text(encoding="utf-8")
+            self.assertIn("Retention Command Center", dashboard)
+            self.assertIn("window.__DASHBOARD_DATA__", dashboard)
             self.assertEqual(len(result["results"]["monthly_trend"]), 12)
             self.assertGreater(float(result["results"]["headline_kpis"].iloc[0]["mrr"]), 0)
 
 
 if __name__ == "__main__":
     unittest.main()
-

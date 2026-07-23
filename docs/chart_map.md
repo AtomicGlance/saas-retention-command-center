@@ -8,7 +8,6 @@
 | Cohort retention | How does retention decay across paid cohorts? | Heatmap | `cohort_retention` | Dense month-by-cohort pattern with cohort-size context. |
 | Risk queue | Which segment-channel combinations merit follow-up? | Exact lookup table | `risk_segments` | Activation, churn, NRR, and current MRR stay visible together. |
 
-Palette policy: single-root decision blue for ordinary marks, quantitative blue
-shades for the heatmap, neutral text and references, and no redundant
-category-color legend.
-
+Palette policy: route blue carries ordinary analytical movement; mint, amber,
+and coral communicate healthy, watch, and risk states with text redundancy.
+Neutral ink and dividers handle structure without adding category-color noise.
