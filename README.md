@@ -64,14 +64,6 @@ python scripts/spot_check.py
 Open `dashboard.html` for the self-contained dashboard. It requires no server,
 CDN, credentials, or external data connection.
 
-## CV-ready bullet
-
-> Built a reproducible SQLite analytics pipeline and self-contained SaaS
-> retention dashboard covering MRR, NRR, churn, activation, conversion, and
-> cohort retention; defined metric denominators, prevented survivorship bias,
-> and reconciled dashboard KPIs to raw subscription records with automated
-> tests.
-
 ## Repository map
 
 ```text
