@@ -320,13 +320,19 @@ def validate_results(results: dict[str, pd.DataFrame]) -> dict[str, Any]:
     checks = {
         "headline_single_row": len(results["headline_kpis"]) == 1,
         "mrr_positive": float(headline["mrr"]) > 0,
-        "rates_bounded": all(
-            0 <= float(headline[field]) <= 1.5
-            for field in ["nrr", "logo_churn_rate", "activation_rate", "trial_to_paid_rate"]
+        "nrr_nonnegative": 0 <= float(headline["nrr"]),
+        "unit_interval_rates": all(
+            0 <= float(headline[field]) <= 1.0
+            for field in ["logo_churn_rate", "activation_rate", "trial_to_paid_rate"]
         ),
         "cohort_month_zero_is_full": bool(
             (cohort.loc[cohort["month_number"] == 0, "retention_rate"].round(6) == 1.0).all()
         ),
+        "cohort_grid_is_complete": bool(
+            cohort.groupby("cohort_month")["month_number"].nunique().eq(7).all()
+            and len(cohort) == cohort["cohort_month"].nunique() * 7
+        ),
+        "cohort_rates_bounded": bool(cohort["retention_rate"].between(0, 1).all()),
         "segment_mrr_reconciles": abs(float(segment["mrr"].sum()) - float(headline["mrr"])) < 0.02,
         "trend_has_twelve_points": len(results["monthly_trend"]) == 12,
     }

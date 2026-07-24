@@ -1,7 +1,8 @@
 -- query: headline_kpis
 WITH bounds AS (
     SELECT MAX(month) AS latest_month,
-           DATE(MAX(month), '-1 month') AS previous_month
+           DATE(MAX(month), '-1 month') AS previous_month,
+           DATE(MAX(month), '+1 month', '-1 day') AS analysis_end_date
     FROM subscription_monthly
 ),
 current_base AS (
@@ -35,7 +36,7 @@ activation AS (
                MIN(CASE WHEN e.event_type = 'integration_connected' THEN e.event_date END) AS integrated_date
         FROM accounts a
         LEFT JOIN product_events e USING (account_id), bounds b
-        WHERE a.signup_date <= DATE(b.latest_month, '-14 day')
+        WHERE a.signup_date <= DATE(b.analysis_end_date, '-14 day')
         GROUP BY a.account_id, a.signup_date
     )
 ),
@@ -47,10 +48,10 @@ conversion AS (
                       AND paid_date <= DATE(signup_date, '+30 day')
                  THEN 1 ELSE 0 END) AS converted_trials
     FROM accounts a, bounds b
-    WHERE a.signup_date <= DATE(b.latest_month, '-30 day')
+    WHERE a.signup_date <= DATE(b.analysis_end_date, '-30 day')
 )
 SELECT
-    b.latest_month AS as_of_month,
+    b.analysis_end_date AS as_of_date,
     ROUND((SELECT SUM(mrr) FROM current_base), 2) AS mrr,
     (SELECT COUNT(*) FROM current_base) AS active_accounts,
     ROUND(
@@ -113,7 +114,9 @@ ORDER BY m.month;
 
 -- query: segment_health
 WITH bounds AS (
-    SELECT MAX(month) AS latest_month, DATE(MAX(month), '-1 month') AS previous_month
+    SELECT MAX(month) AS latest_month,
+           DATE(MAX(month), '-1 month') AS previous_month,
+           DATE(MAX(month), '+1 month', '-1 day') AS analysis_end_date
     FROM subscription_monthly
 ),
 current_base AS (
@@ -151,7 +154,7 @@ segment_activation AS (
                MIN(CASE WHEN e.event_type = 'workspace_configured' THEN e.event_date END) AS configured_date,
                MIN(CASE WHEN e.event_type = 'integration_connected' THEN e.event_date END) AS integrated_date
         FROM accounts a LEFT JOIN product_events e USING (account_id), bounds b
-        WHERE a.signup_date <= DATE(b.latest_month, '-14 day')
+        WHERE a.signup_date <= DATE(b.analysis_end_date, '-14 day')
         GROUP BY a.account_id, a.segment, a.signup_date
     )
     GROUP BY segment
@@ -170,7 +173,9 @@ ORDER BY mrr DESC;
 
 -- query: channel_health
 WITH bounds AS (
-    SELECT MAX(month) AS latest_month FROM subscription_monthly
+    SELECT MAX(month) AS latest_month,
+           DATE(MAX(month), '+1 month', '-1 day') AS analysis_end_date
+    FROM subscription_monthly
 ),
 activation AS (
     SELECT acquisition_channel,
@@ -189,7 +194,7 @@ activation AS (
                MIN(CASE WHEN e.event_type = 'workspace_configured' THEN e.event_date END) AS configured_date,
                MIN(CASE WHEN e.event_type = 'integration_connected' THEN e.event_date END) AS integrated_date
         FROM accounts a LEFT JOIN product_events e USING (account_id), bounds b
-        WHERE a.signup_date <= DATE(b.latest_month, '-30 day')
+        WHERE a.signup_date <= DATE(b.analysis_end_date, '-30 day')
         GROUP BY a.account_id, a.acquisition_channel, a.signup_date, a.paid_date
     )
     GROUP BY acquisition_channel
@@ -201,7 +206,14 @@ FROM activation
 ORDER BY activation_rate DESC;
 
 -- query: cohort_retention
-WITH paid_cohorts AS (
+WITH RECURSIVE month_offsets(month_number) AS (
+    VALUES(0)
+    UNION ALL
+    SELECT month_number + 1
+    FROM month_offsets
+    WHERE month_number < 6
+),
+paid_cohorts AS (
     SELECT a.account_id, DATE(a.paid_date, 'start of month') AS cohort_month
     FROM accounts a
     WHERE a.paid_date IS NOT NULL AND a.paid_date <> ''
@@ -212,27 +224,37 @@ cohort_sizes AS (
     FROM paid_cohorts
     GROUP BY cohort_month
 ),
+cohort_grid AS (
+    SELECT c.cohort_month,
+           o.month_number,
+           DATE(c.cohort_month, printf('+%d months', o.month_number)) AS activity_month,
+           c.cohort_size
+    FROM cohort_sizes c
+    CROSS JOIN month_offsets o
+),
 retention AS (
-    SELECT p.cohort_month,
-           (CAST(STRFTIME('%Y', s.month) AS INTEGER) - CAST(STRFTIME('%Y', p.cohort_month) AS INTEGER)) * 12
-           + CAST(STRFTIME('%m', s.month) AS INTEGER) - CAST(STRFTIME('%m', p.cohort_month) AS INTEGER)
-             AS month_number,
+    SELECT g.cohort_month,
+           g.month_number,
+           g.cohort_size,
            COUNT(DISTINCT s.account_id) AS retained_accounts
-    FROM paid_cohorts p
-    JOIN subscription_monthly s USING (account_id)
-    WHERE s.month >= p.cohort_month
-    GROUP BY p.cohort_month, month_number
+    FROM cohort_grid g
+    JOIN paid_cohorts p
+      ON p.cohort_month = g.cohort_month
+    LEFT JOIN subscription_monthly s
+      ON s.account_id = p.account_id
+     AND s.month = g.activity_month
+    GROUP BY g.cohort_month, g.month_number, g.cohort_size
 )
-SELECT r.cohort_month, r.month_number, r.retained_accounts, c.cohort_size,
-       ROUND(r.retained_accounts * 1.0 / c.cohort_size, 4) AS retention_rate
-FROM retention r
-JOIN cohort_sizes c USING (cohort_month)
-WHERE r.month_number BETWEEN 0 AND 6
-ORDER BY r.cohort_month, r.month_number;
+SELECT cohort_month, month_number, retained_accounts, cohort_size,
+       ROUND(retained_accounts * 1.0 / cohort_size, 4) AS retention_rate
+FROM retention
+ORDER BY cohort_month, month_number;
 
 -- query: risk_segments
 WITH bounds AS (
-    SELECT MAX(month) AS latest_month, DATE(MAX(month), '-1 month') AS previous_month
+    SELECT MAX(month) AS latest_month,
+           DATE(MAX(month), '-1 month') AS previous_month,
+           DATE(MAX(month), '+1 month', '-1 day') AS analysis_end_date
     FROM subscription_monthly
 ),
 activation AS (
@@ -247,7 +269,7 @@ activation AS (
                MIN(CASE WHEN e.event_type = 'workspace_configured' THEN e.event_date END) AS configured_date,
                MIN(CASE WHEN e.event_type = 'integration_connected' THEN e.event_date END) AS integrated_date
         FROM accounts a LEFT JOIN product_events e USING (account_id), bounds b
-        WHERE a.signup_date <= DATE(b.latest_month, '-14 day')
+        WHERE a.signup_date <= DATE(b.analysis_end_date, '-14 day')
         GROUP BY a.account_id, a.segment, a.acquisition_channel, a.signup_date
     )
     GROUP BY segment, acquisition_channel

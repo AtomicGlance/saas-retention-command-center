@@ -3,8 +3,11 @@
   "checks": {
     "headline_single_row": true,
     "mrr_positive": true,
-    "rates_bounded": true,
+    "nrr_nonnegative": true,
+    "unit_interval_rates": true,
     "cohort_month_zero_is_full": true,
+    "cohort_grid_is_complete": true,
+    "cohort_rates_bounded": true,
     "segment_mrr_reconciles": true,
     "trend_has_twelve_points": true
   }
