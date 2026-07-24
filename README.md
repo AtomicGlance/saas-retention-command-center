@@ -2,9 +2,13 @@
 
 [![CI](https://github.com/AtomicGlance/saas-retention-command-center/actions/workflows/ci.yml/badge.svg)](https://github.com/AtomicGlance/saas-retention-command-center/actions/workflows/ci.yml)
 
-A compact **SQL and business-intelligence portfolio project** that turns
-synthetic B2B SaaS account, product-event, and subscription data into an
-auditable monthly operating review.
+A compact **SQL and business-intelligence analysis** that turns synthetic B2B
+SaaS account, product-event, and subscription data into an auditable monthly
+operating review.
+
+**[Open the live dashboard](https://atomicglance.github.io/saas-retention-command-center/)**
+
+![Retention Command Center dashboard](assets/dashboard.jpg)
 
 > Every company, customer, transaction, KPI value, and finding in this
 > repository is deterministic and synthetic. The project demonstrates analysis
