@@ -1,5 +1,7 @@
 # Retention Command Center
 
+[![CI](https://github.com/AtomicGlance/saas-retention-command-center/actions/workflows/ci.yml/badge.svg)](https://github.com/AtomicGlance/saas-retention-command-center/actions/workflows/ci.yml)
+
 A compact **SQL and business-intelligence portfolio project** that turns
 synthetic B2B SaaS account, product-event, and subscription data into an
 auditable monthly operating review.
@@ -36,9 +38,9 @@ The project answers:
 These are descriptive findings from deliberately constructed synthetic data,
 not causal estimates or external benchmarks.
 
-## Skills demonstrated
+## What is implemented
 
-| Skill | Evidence |
+| Area | Evidence |
 |---|---|
 | SQL | Multi-CTE SQLite queries, conditional aggregation, window eligibility, population-preserving joins, cohorts, and reconciliation logic |
 | KPI design | Explicit outcomes, drivers, guardrails, formulas, denominators, and observation windows |
