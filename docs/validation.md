@@ -2,7 +2,8 @@
 
 ## Overall assessment
 
-Ready to share as a **synthetic portfolio demonstration**.
+Ready to share as a **reproducible synthetic analysis**, with the synthetic-data
+boundary stated alongside every result.
 
 ## Methodology
 
@@ -26,10 +27,12 @@ Ready to share as a **synthetic portfolio demonstration**.
   cells that would otherwise disappear from an inner join.
 - Segment MRR reconciles to headline MRR within two cents.
 - The trend dataset contains twelve complete monthly points.
+- `metricproof audit metricproof_contract.json` independently checks published
+  rates, analytical grain, segment-to-headline reconciliation, and cohort
+  integrity from the generated CSV outputs.
 
 ## Required caveat
 
 All source records and findings are deterministic and synthetic. Observed
 channel and segment differences support prioritization of an experiment but do
 not estimate causal impact.
-
