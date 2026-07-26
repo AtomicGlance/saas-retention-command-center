@@ -1,4 +1,4 @@
-"""Render the standalone portfolio dashboard from reviewed query outputs."""
+"""Render the standalone retention dashboard from reviewed query outputs."""
 
 from __future__ import annotations
 
@@ -18,7 +18,7 @@ def render_dashboard(results: dict[str, pd.DataFrame], output_path: Path) -> Pat
 
     payload = {
         "generatedAt": "2025-12-31T23:59:59Z",
-        "status": "Synthetic portfolio data",
+        "status": "Synthetic operating data",
         "headline": _json_records(results["headline_kpis"])[0],
         "monthly": _json_records(results["monthly_trend"]),
         "segments": _json_records(results["segment_health"]),

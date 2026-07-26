@@ -268,7 +268,7 @@ def build_artifact(
             {
                 "id": "intro",
                 "type": "markdown",
-                "body": "## Monthly operating review\n\n**Synthetic portfolio dataset · complete through Dec 2025.** Monitor revenue retention, diagnose acquisition quality, and choose the next growth intervention.",
+                "body": "## Monthly operating review\n\n**Synthetic operating dataset · complete through Dec 2025.** Monitor revenue retention, diagnose acquisition quality, and choose the next growth intervention.",
             },
             {
                 "id": "hero_metrics",
