@@ -1,0 +1,67 @@
+{
+  "title": "Retention Command Center analytical contract",
+  "datasets": {
+    "headline": "data/processed/headline_kpis.csv",
+    "segments": "data/processed/segment_health.csv",
+    "cohorts": "data/processed/cohort_retention.csv"
+  },
+  "checks": [
+    {
+      "id": "one-headline-row-per-date",
+      "type": "unique_grain",
+      "dataset": "headline",
+      "columns": ["as_of_date"]
+    },
+    {
+      "id": "activation-rate-is-bounded",
+      "type": "numeric_range",
+      "dataset": "headline",
+      "column": "activation_rate",
+      "minimum": 0,
+      "maximum": 1
+    },
+    {
+      "id": "activation-rate-recomputes",
+      "type": "ratio_consistency",
+      "dataset": "headline",
+      "numerator": "activated_accounts",
+      "denominator": "eligible_accounts",
+      "rate": "activation_rate",
+      "tolerance": 0.0001
+    },
+    {
+      "id": "trial-conversion-recomputes",
+      "type": "ratio_consistency",
+      "dataset": "headline",
+      "numerator": "converted_trials",
+      "denominator": "eligible_trials",
+      "rate": "trial_to_paid_rate",
+      "tolerance": 0.0001
+    },
+    {
+      "id": "segment-mrr-ties-to-headline",
+      "type": "reconciliation",
+      "left": {
+        "dataset": "segments",
+        "column": "mrr"
+      },
+      "right": {
+        "dataset": "headline",
+        "column": "mrr"
+      },
+      "aggregate": "sum",
+      "tolerance": 0.02
+    },
+    {
+      "id": "retention-cohorts-are-valid",
+      "type": "cohort_integrity",
+      "dataset": "cohorts",
+      "cohort": "cohort_month",
+      "period": "month_number",
+      "retained": "retained_accounts",
+      "size": "cohort_size",
+      "rate": "retention_rate",
+      "monotonic": true
+    }
+  ]
+}

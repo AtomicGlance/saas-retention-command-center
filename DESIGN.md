@@ -72,8 +72,8 @@ components:
 The interface should feel like a premium operating review designed with the
 clarity of transit information: decisive routes, explicit states, legible
 numbers, and just enough civic confidence to make the work memorable. It is
-light because the real usage scene is a hiring manager or analyst reviewing the
-portfolio during the day, often on an ordinary laptop under bright ambient
+light because the dashboard is designed for analysts reviewing monthly
+performance during the day, often on an ordinary laptop under bright ambient
 light.
 
 This world replaces generic dark SaaS chrome with an authored briefing surface.

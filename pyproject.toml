@@ -5,9 +5,11 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "saas-retention-command-center"
 version = "0.1.0"
-description = "A reproducible SQL and dashboard portfolio project for SaaS retention analytics."
+description = "Reproducible SQL retention analysis with auditable KPI definitions and a self-contained operating dashboard."
 readme = "README.md"
 requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
 dependencies = [
   "numpy>=1.26",
   "pandas>=2.2",
