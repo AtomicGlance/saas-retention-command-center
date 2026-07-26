@@ -8,9 +8,9 @@ web
 
 ## Users
 
-Primary user: a hiring manager or analytics lead reviewing a junior data
-analyst portfolio. The reviewer needs to understand the business question,
-analytical approach, technical skills, and recommended action in under five
+Primary user: an analytics lead reviewing a monthly retention readout. The
+reader needs to understand the business question, analytical approach,
+supporting evidence, and recommended action in under five
 minutes.
 
 Assumption: the demonstrated operating audience is a B2B SaaS growth team
@@ -33,7 +33,7 @@ dashboard, and automated reconciliation checks in one compact repository.
 
 The fictional growth team reviews monthly recurring revenue, net revenue
 retention, logo churn, activation, trial conversion, acquisition-channel
-quality, and cohort retention. The portfolio reviewer can run the pipeline
+quality, and cohort retention. The analyst can run the pipeline
 locally with Python and SQLite without external credentials.
 
 ## Capabilities and Constraints

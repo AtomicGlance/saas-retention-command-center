@@ -11,8 +11,8 @@ operating review.
 ![Retention Command Center dashboard](assets/dashboard.jpg)
 
 > Every company, customer, transaction, KPI value, and finding in this
-> repository is deterministic and synthetic. The project demonstrates analysis
-> technique; it does not describe a real business.
+> repository is deterministic and synthetic. It is a controlled analytical
+> scenario, not a description of a real business.
 
 ## The business question
 
@@ -52,7 +52,8 @@ not causal estimates or external benchmarks.
 | Dashboarding | KPI hierarchy, twelve-month trend, segment/channel diagnostics, cohort heatmap, and detail table |
 | Data modeling | Account, product-event, and monthly subscription grains |
 | Data quality | Deterministic generation, eligibility checks, survivorship-bias prevention, and cross-query reconciliation |
-| Reproducibility | One-command pipeline, portable SQLite, self-contained HTML, and automated tests |
+| Metric contracts | MetricProof recomputes rates, reconciles totals, checks grain, and validates retention-cohort structure in CI |
+| Reproducibility | One-command pipeline, portable SQLite, self-contained HTML, automated tests, and an external analytical-contract audit |
 | Stakeholder communication | Plain-language metric dictionary, source visibility, synthetic-data labeling, and causal caveats |
 
 ## Run it
@@ -65,6 +66,7 @@ python -m pip install -e ".[dev]"
 python -m saas_retention --project-root .
 python -m unittest discover -s tests -v
 python scripts/spot_check.py
+metricproof audit metricproof_contract.json
 ```
 
 Open `dashboard.html` for the self-contained responsive dashboard. It is
@@ -89,5 +91,9 @@ credentials, or external data connection.
 
 The synthetic data intentionally contains weaker activation and retention for
 some acquisition/segment combinations. These differences are useful for
-demonstrating prioritization and experiment design; they must not be presented
+testing prioritization and experiment-design logic; they must not be presented
 as causal estimates or real-world benchmarks.
+
+## License
+
+MIT
